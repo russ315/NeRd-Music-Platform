@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    background: #181818;
+    color: white;
+}
+
+#sidebar {
+    width: 200px;
+    height: 100vh;
+    background: #222;
+    position: fixed;
+    padding: 20px;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+#sidebar a {
+    display: block;
+    color: #E8FF8A;
+    text-decoration: none;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+#sidebar a:hover {
+    background: #E8FF8A;
+    color: black;
+}
+
+.playlist-box {
+    background: #222;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.track {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #E8FF8A;
+}
+
+.track img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+}
+
+.add-form input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 200px;
+    background: #222;
+    border: 1px solid #E8FF8A;
+    color: white;
+}
+
+.add-form button {
+    padding: 10px 20px;
+    background: #E8FF8A;
+    border: none;
+    color: black;
+    cursor: pointer;
+}
