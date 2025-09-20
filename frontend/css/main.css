@@ -3,6 +3,10 @@ body {
     font-family: 'Times New Roman', Times, serif;
     background: #181818;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 #sidebar {
@@ -31,20 +35,54 @@ body {
     color: black;
 }
 
-.login input {
-    padding: 10px;
+input {
+    width: 100%;
+    padding: 12px;
     margin: 10px 0;
-    width: 100px;
-    background: #222;
-    border: 1px solid #E8FF8A;
-    color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
-.login button {
-    padding: 10px 20px;
-    background: #E8FF8A;
-    color: black;
+input:focus {
+    outline: none;
+    border-color: #ff5500;
+    box-shadow: 0 0 5px rgba(255, 85, 0, 0.5);
+}
+
+.form-container {
+    background: #63625d;
+    border-radius: 12px;
+    padding: 40px;
+    width: 350px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.form-links {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.form-links a {
+    color: #97fcad;
+    text-decoration: none;
+}
+.btn {
+    width: 100%;
+    background: #ff5500;
+    color: #fff;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #97fcad;
 }
 
 .search-form input {
