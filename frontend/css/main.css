@@ -104,3 +104,12 @@ input:focus {
     margin: 20px 0;
     border-radius: 5px;
 }
+footer {
+    background: #222;
+    color: #E8FF8A;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
