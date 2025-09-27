@@ -16,6 +16,9 @@ body {
 .content {
     margin-left: 220px;
     padding: 20px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
 }
 
 #sidebar a {
@@ -103,6 +106,7 @@ input:focus {
     padding: 20px;
     margin: 20px 0;
     border-radius: 5px;
+    width:100%;
 }
 footer {
     background: #222;

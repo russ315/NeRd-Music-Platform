@@ -16,6 +16,11 @@ body {
 .content {
     margin-left: 220px;
     padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.content h2 {
+    justify-self: center;
 }
 
 #sidebar a {
@@ -36,18 +41,23 @@ body {
     padding: 20px;
     margin: 20px 0;
     border-radius: 5px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
 }
 
 .track {
-    margin: 10px 0;
+    margin: 10px 5px;
     padding: 10px;
     border: 1px solid #E8FF8A;
+    display: flex;
+    
 }
 
 .track img {
     width: 50px;
     height: 50px;
     border-radius: 5px;
+    margin-right: 10px;
 }
 
 .add-form input {
