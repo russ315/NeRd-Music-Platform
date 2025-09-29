@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Arial', Times, serif;
     background: #181818;
     color: white;
 }
@@ -43,14 +43,16 @@ body {
     border-radius: 5px;
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
+    font-family: 'Calibri', Times, serif; 
+    color: #E8FF8A;
 }
 
 .track {
-    margin: 10px 5px;
+    margin: 10px 0;
     padding: 10px;
     border: 1px solid #E8FF8A;
     display: flex;
-    
+    flex-wrap: wrap;
 }
 
 .track img {
