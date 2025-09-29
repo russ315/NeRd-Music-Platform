@@ -19,7 +19,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 }
 
 #sidebar a {
@@ -110,6 +110,7 @@ input:focus {
     cursor: pointer;
     width: 100px;
     height: 35px;
+    border-radius: 10px;
 }
 
 .welcome-box {
@@ -178,6 +179,5 @@ footer {
     text-align: center;
     padding: 15px;
     position: relative;
-    bottom: 0;
     width: 100%;
 }
