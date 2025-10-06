@@ -9,6 +9,8 @@ body {
     --accent: #E8FF8A;
 }
 
+
+/*
 .btn-accent {
     background: var(--accent) !important;
     color: #000 !important;
@@ -54,6 +56,8 @@ body {
     background: #fff !important;
     color: #000 !important;
 }
+*/
+
 
 #sidebar {
     width: 200px;
