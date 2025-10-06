@@ -5,6 +5,20 @@ body {
     color: #fff;
 }
 
+#mobile-nav {
+    display: none;
+    background: #222;
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+}
+
+#mobile-nav a {
+    color: #E8FF8A;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 #sidebar {
     width: 200px;
     height: 100vh;
@@ -110,6 +124,10 @@ body {
 @media (max-width: 991px) {
     #sidebar {
         display: none;
+    }
+    
+    #mobile-nav {
+        display: block;
     }
     
     .content {
