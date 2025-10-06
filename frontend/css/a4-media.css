@@ -107,3 +107,14 @@ body {
     .card-group { grid-template-columns: repeat(3, 1fr); }
 }
 
+@media (max-width: 991px) {
+    #sidebar {
+        display: none;
+    }
+    
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
