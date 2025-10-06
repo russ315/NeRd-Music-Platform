@@ -119,7 +119,9 @@ body {
 
 @media (min-width: 992px) {
     .card-group { grid-template-columns: repeat(3, 1fr); }
-    
+}
+
+@media (max-width: 991px) {
     #sidebar {
         display: none;
     }
