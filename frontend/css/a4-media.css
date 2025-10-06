@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    background: #181818;
+    color: #fff;
+}
+
+#sidebar {
+    width: 200px;
+    height: 100vh;
+    background: #222;
+    position: fixed;
+    padding: 20px;
+}
+
+#sidebar a {
+    display: block;
+    color: #E8FF8A;
+    text-decoration: none;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.typography h1 {
+    font-weight: 800;
+    font-size: 28px;
+    margin: 0 0 12px;
+}
+
+.typography h2 {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 10px;
+    color: #E8FF8A;
+}
+
+.typography p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ddd;
+}
+
+@media (min-width: 576px) {
+    .typography h1 { font-size: 32px; }
+    .typography h2 { font-size: 22px; }
+    .typography p  { font-size: 15px; }
+}
+
+@media (min-width: 768px) {
+    .typography h1 { font-size: 36px; }
+    .typography h2 { font-size: 24px; }
+    .typography p  { font-size: 16px; }
+}
+
+@media (min-width: 992px) {
+    .typography h1 { font-size: 40px; }
+    .typography h2 { font-size: 26px; }
+    .typography p  { font-size: 17px; }
+}
+
+.cards h2 {
+    margin-top: 24px;
+}
+
+.card-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.card {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.card p {
+    margin: 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    .card-group { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 992px) {
+    .card-group { grid-template-columns: repeat(3, 1fr); }
+}
+

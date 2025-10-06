@@ -5,6 +5,56 @@ body {
     color: white;
 }
 
+:root {
+    --accent: #E8FF8A;
+}
+
+.btn-accent {
+    background: var(--accent) !important;
+    color: #000 !important;
+    border: 1px solid var(--accent) !important;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-accent:hover {
+    background: var(--accent) !important;
+    color: #000 !important;
+    filter: brightness(0.9);
+}
+
+.btn-accent-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 10px 18px;
+}
+
+.btn-accent-outline:hover {
+    background: var(--accent);
+    color: #000;
+}
+
+.btn-light-outline {
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid #fff !important;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-light-outline:hover {
+    background: #fff !important;
+    color: #000 !important;
+}
+
 #sidebar {
     width: 200px;
     height: 100vh;
@@ -14,7 +64,7 @@ body {
 }
 
 .content {
-    margin-left: 220px;
+    margin-left: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -68,7 +118,7 @@ input:focus {
     color: #97fcad;
     text-decoration: none;
 }
-.btn {
+.form-container .btn {
     width: 100%;
     background: #ff5500;
     color: #fff;
@@ -81,7 +131,7 @@ input:focus {
     transition: background 0.3s ease;
 }
 
-.btn:hover {
+.form-container .btn:hover {
     background: #97fcad;
 }
 
@@ -93,7 +143,7 @@ input:focus {
     align-items: center;
 }
 
-.search-form input {
+.search-form input:not(.form-control) {
     padding: 10px;
     margin: 10px 0;
     width: 200px;
@@ -102,7 +152,7 @@ input:focus {
     color: white;
 }
 
-.search-form button {
+.search-form button:not(.btn) {
     padding: 10px 20px;
     background: #E8FF8A;
     border: none;
@@ -111,6 +161,29 @@ input:focus {
     width: 100px;
     height: 35px;
     border-radius: 10px;
+}
+
+.form-control::placeholder {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+}
+
+.input-group .form-control {
+    height: 42px;
+}
+.input-group .btn {
+    height: 42px;
+    width: auto !important;
+}
+
+.input-group { 
+    flex-wrap: nowrap !important;
+    display: flex !important;
+}
+
+.search-form .btn-accent {
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .welcome-box {
