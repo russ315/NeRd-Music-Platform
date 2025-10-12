@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assignment 4 - Media Queries</title>
+    <title>Assignment 5 - Interactive Features</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/a4-media.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script defer src="../js/main.js"></script>
+
 </head>
 <body>
     <nav id="mobile-nav">
-        <a href="../../index.html">← Back to Home</a>
+        <a href="#">← Back to Home</a>
     </nav>
 
     <nav id="sidebar">
         <h1>NeRd Music</h1>
-        <a href="../../index.html">Home</a>
-        <a href="assignment4-media.html">A4: Media</a>
+        <a href="#">Home</a>
+        <a href="assignment4-media.html">A5: Interactive</a>
     </nav>
 
     <main class="content">
@@ -26,10 +28,49 @@
             <h1>Discover Your Sound</h1>
             <h2>Music that adapts to every device</h2>
             <p>
-                Welcome to NeRd Music Platform. Explore millions of tracks, create personalized playlists, 
-                and enjoy seamless listening experience across all your devices. From morning motivation to 
+                Welcome to NeRd Music Platform. Explore millions of tracks, create personalized playlists,
+                and enjoy seamless listening experience across all your devices. From morning motivation to
                 late-night relaxation, we have the perfect soundtrack for every moment of your day.
             </p>
+        </section>
+
+        <section class="interactive-features">
+            <h2>Assignment 5: Interactive Features</h2>
+
+            <div class="feature-box">
+                <h3>Frequently Asked Questions (FAQ)</h3>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header">How do I create a playlist?</button>
+                        <div class="accordion-content">
+                            <p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">Can I use this platform offline?</button>
+                        <div class="accordion-content">
+                            <p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">How is my data protected?</button>
+                        <div class="accordion-content">
+                            <p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-box">
+                <h3>Newsletter Subscription</h3>
+                <button id="open-popup-btn" class="feature-btn">Subscribe to our Newsletter</button>
+            </div>
+
+            <div class="feature-box">
+                <h3>Change Page Theme</h3>
+                <button id="change-bg-btn" class="feature-btn">Change Background Color</button>
+            </div>
+
         </section>
 
         <section class="cards">
@@ -54,10 +95,22 @@
         </section>
     </main>
 
+    <div id="popup-overlay">
+        <div class="popup-content">
+            <span id="close-popup-btn">&times;</span>
+            <h3>Subscribe Now</h3>
+            <p>Get the latest music news and updates directly in your inbox.</p>
+            <form>
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit" class="btn">Subscribe</button>
+            </form>
+        </div>
+    </div>
+    
     <footer>
+        <div id="datetime-container"></div>
         <p>Team Members: Ruslan Bolatbekuly, Nurkhan Orazbay</p>
     </footer>
-</body>
-    
-</html>
 
+</body>
+</html>
