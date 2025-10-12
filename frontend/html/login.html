@@ -6,22 +6,34 @@
   <title>Login - Your Favorite Music Platform</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
+  <script src="../js/validation.js" defer></script>
 </head>
 <body>
 
-<div class="form-container">
-  <h2>Login</h2>
-  <form>
-    <label for="email">Email</label>
-      <input id="email" type="email" placeholder="Email" required>
-    <label for="password">Password</label>
-      <input id="password" type="password" placeholder="Password" required>
-    <button type="submit" class="btn">Sign In</button>
-  </form>
-  <div class="form-links">
-    <p>Don't have an account? <a href="register.html">Sign Up</a></p>
-  </div>
+<div class="auth-page-wrapper">
+    <a href="../../index.html" class="back-link">← Back to Home</a>
+
+    <div class="form-container">
+      <h2>Login</h2>
+      <form novalidate >
+         <div class="input-control">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Email">
+                <div class="error"></div>
+            </div>
+        <div class="input-control">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Password" required>
+            <div class="error"></div>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+      </form>
+      <div class="form-links">
+        <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+      </div>
+    </div>
 </div>
+
 <footer>
   <p>Team Members: Ruslan Bolatbekuly, Nurkhan Orazbay</p>
 </footer>

@@ -6,30 +6,48 @@
     <title>Register - Your Favorite Music Platform</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/register.css">
+    <script src="../js/validation.js" defer></script>
+
 </head>
 <body>
 
-<div class="form-container">
-    <h2>Create Account</h2>
-    <form>
-        <label for="username">Username</label>
-            <input id="username" type="text" placeholder="Username" required>
-        <label for="email">Email</label>
-        
-        <input id="email" type="email" placeholder="Email" required>
-        <label for="password">Password</label>
-        
-        <input id="password" type="password" placeholder="Password" required>
-        <label for="confirm-password">Confirm Password</label>
-        <input id="confirm-password" type="password" placeholder="Confirm Password" required>
-        <button type="submit" class="btn">Sign Up</button>
-    </form>
-    <div class="form-links">
-        <p>Already have an account? <a href="login.html">Sign In</a></p>
+<div class="auth-page-wrapper">
+    <a href="../../index.html" class="back-link">← Back to Home</a>
+
+    <div class="form-container">
+        <h2>Create Account</h2>
+        <form novalidate>
+            <div class="input-control">
+                <label for="username">Username</label>
+                <input id="username" type="text" placeholder="Username">
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="email">Email</label>
+                <input id="email" type="email" placeholder="Email">
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="password">Password</label>
+                <input id="password" type="password" placeholder="Password">
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="confirm-password">Confirm Password</label>
+                <input id="confirm-password" type="password" placeholder="Confirm Password">
+                <div class="error"></div>
+            </div>
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+        <div class="form-links">
+            <p>Already have an account? <a href="login.html">Sign In</a></p>
+        </div>
     </div>
 </div>
+
 <footer>
     <p>Team Members: Ruslan Bolatbekuly, Nurkhan Orazbay</p>
 </footer>
+<script src="../js/validation.js"></script>
 </body>
 </html>
