@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (validateInputs()) {
-            alert('Registration successful!');
+            if(username)
+                alert('Registration successful!');
+            else
+                alert('Login successful!');
             console.log('Form is valid and ready to be submitted.');
             form.reset(); 
         }
