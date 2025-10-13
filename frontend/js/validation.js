@@ -11,10 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (validateInputs()) {
-            if(username)
+            if(username){
                 alert('Registration successful!');
-            else
+                window.location.href = '../../index.html';
+            }
+            else{
                 alert('Login successful!');
+                window.location.href = '../../index.html';
+            }
+
             console.log('Form is valid and ready to be submitted.');
             form.reset(); 
         }
