@@ -77,24 +77,24 @@ body {
     .typography p  { font-size: 17px; }
 }
 
-.cards h2 {
+.playlist-cards h2 {
     margin-top: 24px;
 }
 
-.card-group {
+.playlist-group {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
 }
 
-.card {
+.playlist-card {
     background: #222;
     border: 1px solid #333;
     border-radius: 8px;
     padding: 16px;
 }
 
-.card img {
+.playlist-card img {
     width: 100%;
     height: 160px;
     object-fit: cover;
@@ -102,23 +102,23 @@ body {
     margin-bottom: 10px;
 }
 
-.card h3 {
+.playlist-card h3 {
     margin: 0 0 6px;
     font-size: 18px;
 }
 
-.card p {
+.playlist-card p {
     margin: 0;
     color: #ccc;
     font-size: 14px;
 }
 
 @media (min-width: 768px) {
-    .card-group { grid-template-columns: repeat(2, 1fr); }
+    .playlist-group { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (min-width: 992px) {
-    .card-group { grid-template-columns: repeat(3, 1fr); }
+    .playlist-group { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 991px) {
