@@ -1,0 +1,4 @@
+[
+    {"id":"indie1","title":"Indie Waves","img":"frontend/src/img/indie.jpg","audio":"frontend/src/music/indie.mp3"},
+    {"id":"lofi1","title":"Lo‑Fi Beats","img":"frontend/src/img/lofi.jpg","audio":"frontend/src/music/lofi.mp3"}
+]
