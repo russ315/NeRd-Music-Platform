@@ -1,40 +1,18 @@
 body {
     margin: 0;
     font-family: 'Arial', Times, serif;
-    background: #181818;
+    background-color: #181818;
     color: white;
-}
-
-#sidebar {
-    width: 200px;
-    height: 100vh;
-    background: #222;
-    position: fixed;
-    padding: 20px;
 }
 
 .content {
     background-color: #181818;
-    margin-left: 220px;
     padding: 20px;
     display: grid;
     grid-template-columns: 1fr;
 }
 .content h2 {
     justify-self: center;
-}
-
-#sidebar a {
-    display: block;
-    color: #E8FF8A;
-    text-decoration: none;
-    padding: 10px;
-    margin: 5px 0;
-}
-
-#sidebar a:hover {
-    background: #E8FF8A;
-    color: black;
 }
 
 .playlist-box {
