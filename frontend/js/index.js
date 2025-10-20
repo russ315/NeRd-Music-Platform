@@ -116,8 +116,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
     var lang = localStorage.getItem('nerd_lang') || 'en';
+    function getDictByLang(code) {
+        switch (code) {
+            case 'ru':
+                return translations.ru;
+            case 'en':
+            default:
+                return translations.en;
+        }
+    }
     function applyI18n() {
-        var dict = translations[lang] || translations.en;
+        var dict = getDictByLang(lang);
         document.querySelectorAll('[data-i18n]').forEach(function(el){
             var k = el.getAttribute('data-i18n');
             if (dict[k]) el.textContent = dict[k];
@@ -134,6 +143,21 @@ document.addEventListener('DOMContentLoaded', function () {
             applyI18n();
         });
     }
+
+    var navLinks = document.querySelectorAll('.navbar .nav-link');
+    navLinks.forEach(function(link, index){
+        link.addEventListener('keydown', function(e){
+            if (e.key === 'ArrowRight' || e.key === 'Right') {
+                e.preventDefault();
+                var next = navLinks[(index + 1) % navLinks.length];
+                if (next) next.focus();
+            } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                e.preventDefault();
+                var prev = navLinks[(index - 1 + navLinks.length) % navLinks.length];
+                if (prev) prev.focus();
+            }
+        });
+    });
 
     function attachAudioHandlers(scope) {
         var imgsScoped = (scope || document).querySelectorAll('.card-img-top[data-audio]');
