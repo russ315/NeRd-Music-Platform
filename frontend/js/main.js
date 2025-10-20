@@ -44,12 +44,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const changeBgButton = document.getElementById('change-bg-btn');
+    const bgTargetsSelector = '.content, .welcome-box, .music-icons, footer, body';
+    function applyBg(color) {
+        document.querySelectorAll(bgTargetsSelector).forEach(el => { el.style.backgroundColor = color; });
+    }
+    const colors = ['#181818', '#2a3d45', '#5e2a47', '#1f4d3d', '#3c3c3c'];
+    let currentColorIndex = 0;
+    const stored = localStorage.getItem('nerd_bg');
+    if (stored) {
+        const idx = colors.indexOf(stored);
+        currentColorIndex = idx >= 0 ? idx : 0;
+        applyBg(colors[currentColorIndex]);
+    }
     if (changeBgButton) {
-        const colors = ['#181818', '#2a3d45', '#5e2a47', '#1f4d3d', '#3c3c3c'];
-        let currentColorIndex = 0;
         changeBgButton.addEventListener('click', () => {
             currentColorIndex = (currentColorIndex + 1) % colors.length;
-            document.body.style.backgroundColor = colors[currentColorIndex];
+            const color = colors[currentColorIndex];
+            applyBg(color);
+            localStorage.setItem('nerd_bg', color);
         });
     }
 
