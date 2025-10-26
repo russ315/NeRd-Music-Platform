@@ -1,4 +1,102 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    //#region Star Rating System
+    var ratingStorageKey = 'nerd_ratings';
+    
+    function readRatings() {
+        try { 
+            return JSON.parse(localStorage.getItem(ratingStorageKey) || '{}'); 
+        } catch (e) { 
+            return {}; 
+        }
+    }
+    
+    function writeRatings(ratings) {
+        localStorage.setItem(ratingStorageKey, JSON.stringify(ratings));
+    }
+    
+    function getRatingForItem(itemId) {
+        var ratings = readRatings();
+        return ratings[itemId] || 0;
+    }
+    
+    function setRatingForItem(itemId, rating) {
+        var ratings = readRatings();
+        ratings[itemId] = rating;
+        writeRatings(ratings);
+    }
+    
+    function initializeStarRating(ratingContainer) {
+        var itemId = ratingContainer.closest('.card').getAttribute('data-title');
+        var currentRating = getRatingForItem(itemId);
+        
+        // Set initial rating
+        updateStarDisplay(ratingContainer, currentRating);
+        
+        var stars = ratingContainer.querySelectorAll('.star');
+        stars.forEach(function(star, index) {
+            star.addEventListener('mouseenter', function() {
+                highlightStars(ratingContainer, index + 1);
+            });
+            
+            star.addEventListener('mouseleave', function() {
+                updateStarDisplay(ratingContainer, currentRating);
+            });
+            
+            star.addEventListener('click', function() {
+                var newRating = index + 1;
+                currentRating = newRating;
+                setRatingForItem(itemId, newRating);
+                updateStarDisplay(ratingContainer, newRating);
+                
+                // Add bounce animation to rating container
+                ratingContainer.classList.add('rating-clicked');
+                setTimeout(function() {
+                    ratingContainer.classList.remove('rating-clicked');
+                }, 400);
+                
+                // Add pulsing animation to filled stars
+                ratingContainer.classList.add('pulsing');
+                setTimeout(function() {
+                    ratingContainer.classList.remove('pulsing');
+                }, 700);
+            });
+        });
+    }
+    
+    function highlightStars(ratingContainer, rating) {
+        var stars = ratingContainer.querySelectorAll('.star');
+        stars.forEach(function(star, index) {
+            if (index < rating) {
+                star.classList.add('hovered');
+            } else {
+                star.classList.remove('hovered');
+            }
+        });
+    }
+    
+    function updateStarDisplay(ratingContainer, rating) {
+        var stars = ratingContainer.querySelectorAll('.star');
+        stars.forEach(function(star, index) {
+            star.classList.remove('hovered', 'filled');
+            if (index < rating) {
+                star.classList.add('filled');
+            }
+        });
+    }
+    
+    function attachStarRatingHandlers(scope) {
+        var ratingContainers = (scope || document).querySelectorAll('.rating');
+        ratingContainers.forEach(function(container) {
+            if (!container._ratingInitialized) {
+                container._ratingInitialized = true;
+                initializeStarRating(container);
+            }
+        });
+    }
+   
+    attachStarRatingHandlers(document);
+    //#endregion
+    //#region Favourites
     var storageKey = 'nerd_favourites';
     function readFavs() {
         try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (e) { return []; }
@@ -14,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
             writeFavs(favs);
         }
     }
-
+    
     var addButtons = document.querySelectorAll('.add-fav');
     addButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -26,7 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.disabled = true;
         });
     });
-
+    //#endregion
+    //#region Search
     var input = document.getElementById('searchInput');
     var btn = document.getElementById('searchBtn');
     
@@ -43,22 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', applySearch);
         input.addEventListener('keyup', function (e) { if (e.key === 'Enter') applySearch(); });
     }
-
-    var ratings = document.querySelectorAll('.rating');
-    ratings.forEach(function (block) {
-        var stars = block.querySelectorAll('.star');
-        stars.forEach(function (star) {
-            star.addEventListener('click', function () {
-                var value = parseInt(star.getAttribute('data-value'), 10);
-                block.setAttribute('data-rating', String(value));
-                stars.forEach(function (s) {
-                    var v = parseInt(s.getAttribute('data-value'), 10);
-                    s.classList.toggle('active', v <= value);
-                });
-            });
-        });
-    });
-
+    //#endregion
+    //#region Audio Playback
     var currentAudio = null;
     function stopCurrent() {
         if (currentAudio) {
@@ -91,7 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
     });
+    //#endregion
 
+    //#region Internationalization (i18n)
     var translations = {
         en: {
             load_more: 'Load more',
@@ -148,8 +235,10 @@ document.addEventListener('DOMContentLoaded', function () {
             applyI18n();
         });
     }
+    //#endregion
 
     var navLinks = document.querySelectorAll('.navbar .nav-link');
+    console.log(navLinks+"dsasad");
     navLinks.forEach(function(link, index){
         link.addEventListener('keydown', function(e){
             if (e.key === 'ArrowRight' || e.key === 'Right') {
@@ -198,6 +287,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 + '<img src="'+item.img+'" class="card-img-top" data-audio="'+item.audio+'" alt="'+item.title+'">'
                 + '<div class="card-body d-flex flex-column">'
                 + '<p class="card-text mb-2">'+item.title+'</p>'
+                + '<div class="rating mb-3" data-rating="0">'
+                + '<span class="star" data-value="1">★</span>'
+                + '<span class="star" data-value="2">★</span>'
+                + '<span class="star" data-value="3">★</span>'
+                + '<span class="star" data-value="4">★</span>'
+                + '<span class="star" data-value="5">★</span>'
+                + '</div>'
                 + '<button class="btn btn-warning mt-auto add-fav" data-id="'+item.id+'" data-title="'+item.title+'" data-img="'+item.img+'">Add to Favourites</button>'
                 + '</div></div>';
             container.appendChild(col);
@@ -215,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
         attachAudioHandlers(document.getElementById('moreContainer'));
+        attachStarRatingHandlers(document.getElementById('moreContainer'));
     }
 
     var loadBtn = document.getElementById('loadMore');
