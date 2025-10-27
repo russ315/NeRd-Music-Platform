@@ -765,3 +765,263 @@ footer {
     font-size: 11px;
   }
 }
+
+/* UX Engagement Elements Styles */
+
+/* Task 4: Scroll Progress Bar */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #1a1a1a, #2a2a2a);
+  border-radius: 0 0 3px 3px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.scroll-progress-bar.scrolling {
+  box-shadow: 0 0 20px rgba(232, 255, 138, 0.3);
+}
+
+.scroll-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, 
+    #ff6b6b, 
+    #4ecdc4, 
+    #45b7d1, 
+    #96ceb4, 
+    #feca57, 
+    #ff9ff3, 
+    #54a0ff
+  );
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease infinite;
+  border-radius: 0 0 3px 3px;
+  transition: width 0.1s ease;
+  position: relative;
+}
+
+.scroll-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.scroll-progress-text {
+  position: absolute;
+  top: 8px;
+  right: 20px;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(232, 255, 138, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-progress-bar.scrolling .scroll-progress-text {
+  opacity: 1;
+}
+
+/* Task 5: Animated Number Counter */
+.stats-section {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  padding: 60px 20px;
+  margin: 40px 0;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(232, 255, 138, 0.05) 50%, transparent 70%);
+  animation: backgroundShift 8s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(232, 255, 138, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(232, 255, 138, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.stat-item:hover::before {
+  left: 100%;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(232, 255, 138, 0.2);
+  border-color: var(--accent);
+}
+
+.animated-counter {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin: 10px 0;
+  text-shadow: 0 0 20px rgba(232, 255, 138, 0.5);
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover .animated-counter {
+  transform: scale(1.1);
+  text-shadow: 0 0 30px rgba(232, 255, 138, 0.8);
+}
+
+.stat-label {
+  font-size: 1.1rem;
+  color: #ccc;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 10px;
+}
+
+.stat-description {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+/* Task 6: Loading Spinner */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.btn-loading .btn-text {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-loading .spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.btn-loading .loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8em;
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Enhanced button styles for loading states */
+.btn-loading {
+  background: linear-gradient(45deg, #666, #888) !important;
+  color: #fff !important;
+  cursor: not-allowed !important;
+}
+
+.btn-loading:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive design for UX elements */
+@media (max-width: 768px) {
+  .stats-container {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  
+  .stat-item {
+    padding: 20px 15px;
+  }
+  
+  .animated-counter {
+    font-size: 2.5rem;
+  }
+  
+  .scroll-progress-text {
+    right: 10px;
+    font-size: 10px;
+  }
+}

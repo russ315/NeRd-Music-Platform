@@ -355,4 +355,184 @@ $(document).ready(function() {
     initializeSearchSystem();
     
     //#endregion
+    
+    //#region UX Engagement Elements with jQuery
+    
+    // Task 4: Colorful and Stylized Scroll Progress Bar
+    function initializeScrollProgressBar() {
+        // Create progress bar HTML
+        const progressBarHtml = `
+            <div id="scrollProgressBar" class="scroll-progress-container">
+                <div class="scroll-progress-bar">
+                    <div class="scroll-progress-fill"></div>
+                    <div class="scroll-progress-text">Scroll Progress</div>
+                </div>
+            </div>
+        `;
+        
+        // Add to body
+        $('body').append(progressBarHtml);
+        
+        // Scroll progress calculation and animation
+        $(window).on('scroll', function() {
+            const scrollTop = $(window).scrollTop();
+            const docHeight = $(document).height();
+            const winHeight = $(window).height();
+            const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+            
+            // Update progress bar
+            $('.scroll-progress-fill').css('width', scrollPercent + '%');
+            
+            // Update text with percentage
+            $('.scroll-progress-text').text(`Scroll Progress: ${Math.round(scrollPercent)}%`);
+            
+            // Add glow effect when scrolling
+            if (scrollPercent > 0) {
+                $('.scroll-progress-bar').addClass('scrolling');
+            } else {
+                $('.scroll-progress-bar').removeClass('scrolling');
+            }
+        });
+        
+        console.log('Scroll Progress Bar initialized');
+    }
+    
+    // Task 5: Animated Number Counter
+    function initializeAnimatedCounters() {
+        // Counter animation function
+        function animateCounter($element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16); // 60fps
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                // Format number with commas
+                const formattedNumber = Math.floor(current).toLocaleString();
+                $element.text(formattedNumber);
+            }, 16);
+        }
+        
+        // Intersection Observer for counter animation
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                    const $counter = $(entry.target);
+                    const targetValue = parseInt($counter.data('target'));
+                    
+                    if (targetValue) {
+                        $counter.addClass('counted');
+                        animateCounter($counter, targetValue);
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all counter elements
+        $('.animated-counter').each(function() {
+            counterObserver.observe(this);
+        });
+        
+        console.log('Animated Counters initialized');
+    }
+    
+    // Task 6: Loading Spinner on Submit
+    function initializeLoadingSpinners() {
+        
+
+        // Handle form submissions
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            
+            const $form = $(this);
+            const $submitBtn = $form.find('button[type="submit"], input[type="submit"]');
+            
+            if ($submitBtn.length && !$submitBtn.hasClass('btn-loading')) {
+                showLoadingSpinner($submitBtn);
+                
+                // Simulate server call
+                setTimeout(() => {
+                    hideLoadingSpinner($submitBtn);
+                    // Here you would normally handle the actual form submission
+                    $("#test-input").val('');
+                    console.log('Form submitted successfully');
+                }, 3000); // 3 second delay
+                
+            }
+        });
+        
+        // Handle individual submit buttons
+        $('.btn-submit').on('click', function(e) {
+            e.preventDefault();
+            
+            const $btn = $(this);
+            
+            if (!$btn.hasClass('btn-loading')) {
+                showLoadingSpinner($btn);
+                
+                // Simulate server call
+                setTimeout(() => {
+                    hideLoadingSpinner($btn);
+                    console.log('Action completed successfully');
+                    $("#test-input").val('');
+
+                }, 2000); // 2 second delay
+            }
+        });
+        
+        console.log('Loading Spinners initialized');
+    }
+    
+    function showLoadingSpinner($button) {
+        const originalText = $button.text();
+        const originalHtml = $button.html();
+        
+        // Store original content
+        $button.data('original-text', originalText);
+        $button.data('original-html', originalHtml);
+        
+        // Add loading state
+        $button.addClass('btn-loading')
+               .prop('disabled', true)
+               .html(`
+                   <span class="btn-text">${originalText}</span>
+                   <div class="spinner"></div>
+                   <span class="loading-text">Please wait...</span>
+               `);
+    }
+    
+    function hideLoadingSpinner($button) {
+        const originalHtml = $button.data('original-html');
+        
+        // Remove loading state
+        $button.removeClass('btn-loading')
+               .prop('disabled', false)
+               .html(originalHtml);
+    }
+    
+    // Initialize all UX engagement elements
+    function initializeUXEngagement() {
+        console.log('Initializing UX Engagement Elements...');
+        
+        initializeScrollProgressBar();
+        initializeAnimatedCounters();
+        initializeLoadingSpinners();
+        
+        console.log('UX Engagement Elements initialized successfully!');
+    }
+    
+    // Initialize the UX engagement system
+    initializeUXEngagement();
+    
+    //#endregion
 });
