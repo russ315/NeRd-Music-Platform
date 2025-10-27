@@ -125,23 +125,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     //#endregion
-    //#region Search
-    var input = document.getElementById('searchInput');
-    var btn = document.getElementById('searchBtn');
+    //#region Search (Legacy - DISABLED to prevent conflicts with jQuery search)
+    // This section is disabled to prevent conflicts with the new jQuery search system
+    // The main search functionality is now handled by jQuery in search.js
     
-    function applySearch() {
-        var q = (input.value || '').toLowerCase().trim();
-        var cards = document.querySelectorAll('.card[data-title]');
-        cards.forEach(function (card) {
-            var title = card.getAttribute('data-title').toLowerCase();
-            card.style.display = title.indexOf(q) !== -1 ? '' : 'none';
-        });
-    }
+    // var input = document.getElementById('searchInput');
+    // var btn = document.getElementById('searchBtn');
     
-    if (btn && input) {
-        btn.addEventListener('click', applySearch);
-        input.addEventListener('keyup', function (e) { if (e.key === 'Enter') applySearch(); });
-    }
+    // function applySearch() {
+    //     var q = (input.value || '').toLowerCase().trim();
+    //     var cards = document.querySelectorAll('.card[data-title]');
+    //     cards.forEach(function (card) {
+    //         var title = card.getAttribute('data-title').toLowerCase();
+    //         card.style.display = title.indexOf(q) !== -1 ? '' : 'none';
+    //     });
+    // }
+    
+    // Note: All search functionality is now handled by jQuery search system
     //#endregion
     //#region Audio Playback
     var currentAudio = null;
