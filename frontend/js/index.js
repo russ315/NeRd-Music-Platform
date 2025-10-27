@@ -48,13 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 setRatingForItem(itemId, newRating);
                 updateStarDisplay(ratingContainer, newRating);
                 
-                // Add bounce animation to rating container
                 ratingContainer.classList.add('rating-clicked');
                 setTimeout(function() {
                     ratingContainer.classList.remove('rating-clicked');
                 }, 400);
                 
-                // Add pulsing animation to filled stars
                 ratingContainer.classList.add('pulsing');
                 setTimeout(function() {
                     ratingContainer.classList.remove('pulsing');

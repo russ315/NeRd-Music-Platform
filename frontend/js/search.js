@@ -1,7 +1,6 @@
 $(document).ready(function() {
     //#region jQuery Search System
     
-    // Search data and configuration
     const searchConfig = {
         minSearchLength: 2,
         maxSuggestions: 8,
@@ -9,7 +8,6 @@ $(document).ready(function() {
         highlightClass: 'search-highlight'
     };
     
-    // Music data for autocomplete suggestions
     const musicData = [
         { title: 'Daily Mix 1', genre: 'Pop', artist: 'Various Artists' },
         { title: 'Daily Mix 2', genre: 'Rock', artist: 'Various Artists' },
@@ -24,14 +22,12 @@ $(document).ready(function() {
         { title: 'Lo-Fi Beats', genre: 'Lo-Fi', artist: 'Chill Beats' }
     ];
     
-    // FAQ data for search highlighting
     const faqData = [
         { question: 'How do I create a playlist?', answer: 'To create a playlist, navigate to the My Playlists section and click the New Playlist button.' },
         { question: 'Can I use this platform offline?', answer: 'Offline listening is a premium feature. Subscribers can download their favorite tracks.' },
         { question: 'How is my data protected?', answer: 'We take your privacy seriously. All user data is encrypted and stored securely.' }
     ];
     
-    // Debounce function for performance
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -49,26 +45,22 @@ $(document).ready(function() {
         const $searchInput = $('#searchInput');
         const $musicCards = $('.card[data-title]');
         
-        // Debounced search function
         const debouncedSearch = debounce(function(searchTerm) {
             performRealTimeFilter(searchTerm, $musicCards);
         }, searchConfig.debounceDelay);
         
-        // Real-time filtering on keyup
         $searchInput.on('keyup', function() {
             const searchTerm = $(this).val().toLowerCase().trim();
             
             if (searchTerm.length >= searchConfig.minSearchLength) {
                 debouncedSearch(searchTerm);
             } else if (searchTerm.length === 0) {
-                // Show all cards when search is cleared
                 $musicCards.show().removeClass('search-filtered');
                 clearSearchHighlighting();
                 $('#no-results-message').remove();
             }
         });
         
-        // Handle search button click
         $('#searchBtn').on('click', function() {
             const searchTerm = $searchInput.val().toLowerCase().trim();
             if (searchTerm.length >= searchConfig.minSearchLength) {
@@ -76,7 +68,6 @@ $(document).ready(function() {
             }
         });
         
-        // Handle Enter key
         $searchInput.on('keypress', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
@@ -91,7 +82,6 @@ $(document).ready(function() {
     function performRealTimeFilter(searchTerm, $musicCards) {
         let hasResults = false;
         
-        // First, clear any existing highlights to prevent HTML corruption
         clearSearchHighlighting();
         
         $musicCards.each(function() {
@@ -99,7 +89,6 @@ $(document).ready(function() {
             const title = $card.attr('data-title').toLowerCase();
             const cardText = $card.text().toLowerCase();
             
-            // Check if search term matches title or any text in the card
             if (title.includes(searchTerm) || cardText.includes(searchTerm)) {
                 $card.show().addClass('search-filtered');
                 hasResults = true;
@@ -108,10 +97,8 @@ $(document).ready(function() {
             }
         });
         
-        // Show "no results" message if needed
         showNoResultsMessage(hasResults, searchTerm);
         
-        // Highlight search terms in visible cards (only after filtering is complete)
         if (hasResults) {
             setTimeout(() => {
                 highlightSearchTerms(searchTerm);
@@ -140,7 +127,6 @@ $(document).ready(function() {
         const $searchInput = $('#searchInput');
         const $suggestions = $('#searchSuggestions');
         
-        // Debounced autocomplete function
         const debouncedAutocomplete = debounce(function(searchTerm) {
             showAutocompleteSuggestions(searchTerm, $suggestions);
         }, searchConfig.debounceDelay);
@@ -155,20 +141,17 @@ $(document).ready(function() {
             }
         });
         
-        // Hide suggestions when clicking outside
         $(document).on('click', function(e) {
             if (!$(e.target).closest('.search-container').length) {
                 $suggestions.hide();
             }
         });
         
-        // Handle suggestion selection
         $suggestions.on('click', '.suggestion-item', function() {
             const suggestionText = $(this).text();
             $searchInput.val(suggestionText);
             $suggestions.hide();
             
-            // Trigger search with selected suggestion
             performRealTimeFilter(suggestionText.toLowerCase(), $('.card[data-title]'));
         });
     }
@@ -215,7 +198,6 @@ $(document).ready(function() {
     }
     
     function highlightSearchTerms(searchTerm) {
-        // Clear previous highlights
         clearSearchHighlighting();
         
         if (searchTerm.length < searchConfig.minSearchLength) return;
@@ -240,7 +222,6 @@ $(document).ready(function() {
     }
     
     function highlightTextInElement($element, searchTerm) {
-        // Only highlight if the element doesn't already contain highlighted text
         if ($element.find(`.${searchConfig.highlightClass}`).length > 0) {
             return;
         }
@@ -260,7 +241,6 @@ $(document).ready(function() {
     }
     
     function clearSearchHighlighting() {
-        // Remove all highlight spans and restore original text
         $(`.${searchConfig.highlightClass}`).each(function() {
             $(this).replaceWith($(this).text());
         });
@@ -278,16 +258,13 @@ $(document).ready(function() {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
     
-    // Advanced search features
     function initializeAdvancedSearch() {
-        // Search by genre
         $('.genre-filter').on('click', function() {
             const genre = $(this).data('genre');
             performRealTimeFilter(genre.toLowerCase(), $('.card[data-title]'));
             $('#searchInput').val(genre);
         });
         
-        // Search history
         const searchHistory = JSON.parse(localStorage.getItem('nerd_search_history') || '[]');
         
         $('#searchInput').on('keypress', function(e) {
@@ -303,7 +280,6 @@ $(document).ready(function() {
             }
         });
         
-        // Show search history on focus
         $('#searchInput').on('focus', function() {
             if (searchHistory.length > 0) {
                 showSearchHistory(searchHistory);
@@ -323,11 +299,9 @@ $(document).ready(function() {
         $suggestions.html(historyHtml).show();
     }
     
-    // Initialize all search features
     function initializeSearchSystem() {
         console.log('Initializing jQuery Search System...');
         
-        // Check if required elements exist
         const $searchInput = $('#searchInput');
         const $musicCards = $('.card[data-title]');
         
@@ -351,7 +325,6 @@ $(document).ready(function() {
         console.log('jQuery Search System initialized successfully!');
     }
     
-    // Initialize the search system
     initializeSearchSystem();
     
     //#endregion
@@ -370,23 +343,18 @@ $(document).ready(function() {
             </div>
         `;
         
-        // Add to body
         $('body').append(progressBarHtml);
         
-        // Scroll progress calculation and animation
         $(window).on('scroll', function() {
             const scrollTop = $(window).scrollTop();
             const docHeight = $(document).height();
             const winHeight = $(window).height();
             const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
             
-            // Update progress bar
             $('.scroll-progress-fill').css('width', scrollPercent + '%');
             
-            // Update text with percentage
             $('.scroll-progress-text').text(`Scroll Progress: ${Math.round(scrollPercent)}%`);
             
-            // Add glow effect when scrolling
             if (scrollPercent > 0) {
                 $('.scroll-progress-bar').addClass('scrolling');
             } else {
@@ -399,7 +367,6 @@ $(document).ready(function() {
     
     // Task 5: Animated Number Counter
     function initializeAnimatedCounters() {
-        // Counter animation function
         function animateCounter($element, target, duration = 2000) {
             const start = 0;
             const increment = target / (duration / 16); // 60fps
@@ -412,13 +379,11 @@ $(document).ready(function() {
                     clearInterval(timer);
                 }
                 
-                // Format number with commas
                 const formattedNumber = Math.floor(current).toLocaleString();
                 $element.text(formattedNumber);
             }, 16);
         }
         
-        // Intersection Observer for counter animation
         const observerOptions = {
             threshold: 0.5,
             rootMargin: '0px 0px -50px 0px'
@@ -438,7 +403,6 @@ $(document).ready(function() {
             });
         }, observerOptions);
         
-        // Observe all counter elements
         $('.animated-counter').each(function() {
             counterObserver.observe(this);
         });
@@ -450,7 +414,6 @@ $(document).ready(function() {
     function initializeLoadingSpinners() {
         
 
-        // Handle form submissions
         $('form').on('submit', function(e) {
             e.preventDefault();
             
@@ -463,7 +426,7 @@ $(document).ready(function() {
                 // Simulate server call
                 setTimeout(() => {
                     hideLoadingSpinner($submitBtn);
-                    // Here you would normally handle the actual form submission
+                
                     $("#test-input").val('');
                     showNotification('Form Submitted!', 'Your form has been submitted successfully', 'success', 3000);
                     console.log('Form submitted successfully');
@@ -472,7 +435,6 @@ $(document).ready(function() {
             }
         });
         
-        // Handle individual submit buttons
         $('.btn-submit').on('click', function(e) {
             e.preventDefault();
             
@@ -499,11 +461,9 @@ $(document).ready(function() {
         const originalText = $button.text();
         const originalHtml = $button.html();
         
-        // Store original content
         $button.data('original-text', originalText);
         $button.data('original-html', originalHtml);
         
-        // Add loading state
         $button.addClass('btn-loading')
                .prop('disabled', true)
                .html(`
@@ -516,13 +476,11 @@ $(document).ready(function() {
     function hideLoadingSpinner($button) {
         const originalHtml = $button.data('original-html');
         
-        // Remove loading state
         $button.removeClass('btn-loading')
                .prop('disabled', false)
                .html(originalHtml);
     }
     
-    // Initialize all UX engagement elements
     function initializeUXEngagement() {
         console.log('Initializing UX Engagement Elements...');
         
@@ -533,7 +491,6 @@ $(document).ready(function() {
         console.log('UX Engagement Elements initialized successfully!');
     }
     
-    // Initialize the UX engagement system
     initializeUXEngagement();
     
     //#endregion
@@ -558,7 +515,6 @@ $(document).ready(function() {
         
         $('body').append(notificationHtml);
         
-        // Show notification function
         window.showNotification = function(title, message, type = 'success', duration = 3000) {
             const $container = $('#notificationContainer');
             const $toast = $container.find('.notification-toast');
@@ -566,11 +522,9 @@ $(document).ready(function() {
             const $title = $toast.find('.notification-title');
             const $message = $toast.find('.notification-message');
             
-            // Set content
             $title.text(title);
             $message.text(message);
             
-            // Set icon and type
             $toast.removeClass('success error warning info').addClass(type);
             switch(type) {
                 case 'success':
@@ -587,10 +541,8 @@ $(document).ready(function() {
                     break;
             }
             
-            // Show notification
             $container.addClass('show');
             
-            // Auto hide after duration
             setTimeout(() => {
                 hideNotification();
             }, duration);
@@ -616,12 +568,10 @@ $(document).ready(function() {
     
     // Task 8: Copy to Clipboard Button
     function initializeCopyToClipboard() {
-        // Add copy buttons to elements with data-copy attribute
         $('[data-copy]').each(function() {
             const $element = $(this);
             const copyText = $element.data('copy') || $element.text();
             
-            // Create copy button
             const $copyBtn = $(`
                 <button class="copy-btn" data-copy-text="${copyText}">
                     <span class="copy-icon">📋</span>
@@ -629,10 +579,8 @@ $(document).ready(function() {
                 </button>
             `);
             
-            // Add tooltip
             $copyBtn.attr('title', 'Click to copy');
             
-            // Insert copy button
             if ($element.is('input, textarea')) {
                 $element.after($copyBtn);
             } else {
@@ -640,7 +588,6 @@ $(document).ready(function() {
             }
         });
         
-        // Handle copy button clicks
         $(document).on('click', '.copy-btn', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -650,17 +597,13 @@ $(document).ready(function() {
             const $icon = $btn.find('.copy-icon');
             const $text = $btn.find('.copy-text');
             
-            // Copy to clipboard
             navigator.clipboard.writeText(textToCopy).then(() => {
-                // Success feedback
                 $icon.text('✓');
                 $text.text('Copied!');
                 $btn.addClass('copied');
                 
-                // Show notification
                 showNotification('Copied!', 'Text copied to clipboard', 'success', 2000);
                 
-                // Reset after 2 seconds
                 setTimeout(() => {
                     $icon.text('📋');
                     $text.text('Copy');
@@ -673,7 +616,6 @@ $(document).ready(function() {
             });
         });
         
-        // Handle copy events
         $(document).on('copy', function(e) {
             showNotification('Copied!', 'Content copied to clipboard', 'info', 2000);
         });
@@ -688,17 +630,14 @@ $(document).ready(function() {
             const $img = $(this);
             const originalSrc = $img.attr('src');
             
-            // Skip if already has data-src (already processed)
             if ($img.data('lazy-processed')) return;
             
-            // Set placeholder
             $img.attr('data-src', originalSrc);
             $img.attr('src', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+');
             $img.addClass('lazy-image');
             $img.data('lazy-processed', true);
         });
         
-        // Lazy load function
         function lazyLoadImage($img) {
             const src = $img.data('src');
             if (src) {
@@ -706,17 +645,14 @@ $(document).ready(function() {
                 $img.removeClass('lazy-image');
                 $img.addClass('lazy-loaded');
                 
-                // Fade in effect
                 $img.css('opacity', '0').animate({opacity: 1}, 500);
                 
-                // Show notification for first few images
                 if ($img.closest('.card').length) {
                     showNotification('Image Loaded', 'Content loaded successfully', 'info', 1500);
                 }
             }
         }
         
-        // Check if image is in viewport
         function isInViewport($img) {
             const elementTop = $img.offset().top;
             const elementBottom = elementTop + $img.outerHeight();
@@ -726,7 +662,6 @@ $(document).ready(function() {
             return elementBottom > viewportTop && elementTop < viewportBottom;
         }
         
-        // Load images in viewport
         function loadVisibleImages() {
             $('.lazy-image').each(function() {
                 const $img = $(this);
@@ -736,7 +671,6 @@ $(document).ready(function() {
             });
         }
         
-        // Initial load
         // loadVisibleImages();
         
         // Load on scroll
@@ -752,7 +686,6 @@ $(document).ready(function() {
         console.log('Lazy Loading initialized');
     }
     
-    // Initialize all functionality improvements
     function initializeFunctionalityImprovements() {
         console.log('Initializing Web App Functionality Improvements...');
         
@@ -763,7 +696,6 @@ $(document).ready(function() {
         console.log('Web App Functionality Improvements initialized successfully!');
     }
     
-    // Initialize the functionality improvements
     initializeFunctionalityImprovements();
     
     //#endregion
