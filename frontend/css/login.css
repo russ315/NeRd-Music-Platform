@@ -1,6 +1,76 @@
-body{
-    display: grid;
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-page-wrapper {
+    flex: 1;
+    display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 20px;
+    width: 100%;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 1px solid rgba(232, 255, 138, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.form-container h2 {
+    color: var(--accent);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+.form-links a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
 }
