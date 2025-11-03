@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         header.addEventListener('click', () => {
             const content = item.querySelector('.accordion-content');
             const isActive = item.classList.contains('active');
-            
+
             accordionItems.forEach(otherItem => {
                 otherItem.classList.remove('active');
                 otherItem.querySelector('.accordion-content').style.maxHeight = null;
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             popupOverlay.style.display = 'none';
         });
     }
-    
+
     if (popupOverlay) {
         popupOverlay.addEventListener('click', (event) => {
             if (event.target === popupOverlay) {
@@ -43,25 +43,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const changeBgButton = document.getElementById('change-bg-btn');
-    const bgTargetsSelector = '.content, .welcome-box, .music-icons, footer, body';
-    function applyBg(color) {
-        document.querySelectorAll(bgTargetsSelector).forEach(el => { el.style.backgroundColor = color; });
+    const themeToggle = document.getElementById('themeToggle');
+
+    function getCurrentTheme() {
+        return document.documentElement.getAttribute('data-theme') || 'dark';
     }
-    const colors = ['#181818', '#2a3d45', '#5e2a47', '#1f4d3d', '#3c3c3c'];
-    let currentColorIndex = 0;
-    const stored = localStorage.getItem('nerd_bg');
-    if (stored) {
-        const idx = colors.indexOf(stored);
-        currentColorIndex = idx >= 0 ? idx : 0;
-        applyBg(colors[currentColorIndex]);
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('nerd_theme', theme);
+
+        if (themeToggle) {
+            themeToggle.textContent = theme === 'light' ? '🌞' : '🌙';
+            themeToggle.title = theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
+        }
     }
-    if (changeBgButton) {
-        changeBgButton.addEventListener('click', () => {
-            currentColorIndex = (currentColorIndex + 1) % colors.length;
-            const color = colors[currentColorIndex];
-            applyBg(color);
-            localStorage.setItem('nerd_bg', color);
+
+    const storedTheme = localStorage.getItem('nerd_theme') || 'dark';
+    setTheme(storedTheme);
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = getCurrentTheme();
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
         });
     }
 
@@ -83,6 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (dateTimeContainer) {
         setInterval(updateDateTime, 1000);
-        updateDateTime(); 
+        updateDateTime();
     }
 });

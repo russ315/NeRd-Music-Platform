@@ -33,7 +33,7 @@
         <p>Don't have an account? <a href="register.html">Sign Up</a></p>
       </div>
       
-      <!-- Copy to Clipboard Demo -->
+      
       <div class="feature-box mt-4">
         <h6>Quick Access</h6>
         <p data-copy="support@nerd-music.com">Contact Support: support@nerd-music.com</p>
@@ -48,6 +48,9 @@
       <div class="col-12 col-md-4">
         <h5>NeRd</h5>
         <div id="datetime-container"></div>
+        <div class="feature-box">
+          <button id="open-popup-btn" class="feature-btn">Subscribe to our Newsletter</button>
+        </div>
       </div>
       <div class="col-12 col-md-8">
         <div class="accordion-item">
@@ -64,7 +67,19 @@
         </div>
       </div>
     </div>
-    <div class="pt-3">Team Members: Ruslan Bolatbekuly, Nurkhan Orazbay</div>
+
+    <div id="popup-overlay">
+      <div class="popup-content">
+        <span id="close-popup-btn">&times;</span>
+        <h3>Subscribe Now</h3>
+        <p>Get the latest music news and updates directly in your inbox.</p>
+        <form>
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="feature-btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="pt-3">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

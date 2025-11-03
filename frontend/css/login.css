@@ -30,7 +30,7 @@ body {
 .back-link {
     display: inline-block;
     margin-bottom: 1.5rem;
-    color: var(--accent);
+    color: #4ecdc4;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
@@ -42,7 +42,7 @@ body {
 }
 
 .form-container h2 {
-    color: var(--accent);
+    color: #4ecdc4;
     font-weight: bold;
     margin-bottom: 1.5rem;
 }
@@ -65,7 +65,7 @@ body {
 }
 
 .form-links a {
-    color: var(--accent);
+    color: #4ecdc4;
     text-decoration: none;
     font-weight: bold;
 }

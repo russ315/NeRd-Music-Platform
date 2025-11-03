@@ -1,71 +1,84 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- Global variable for audio playback ---
+
+
     var currentAudio = null;
-    
-    // --- Global function to stop audio ---
+    window.currentAudio = null;
+
+
     function stopCurrent() {
         if (currentAudio) {
             currentAudio.pause();
             currentAudio.currentTime = 0;
             currentAudio = null;
+            window.currentAudio = null;
+        }
+        var bg = document.querySelector('.music-background');
+        if (bg) {
+            bg.classList.remove('playing');
+        }
+
+        var contentEl = document.querySelector('.content');
+        var welcomeBox = document.querySelector('.welcome-box');
+        var musicIcons = document.querySelector('.music-icons');
+        if (contentEl) contentEl.classList.remove('playing-music');
+        if (welcomeBox) welcomeBox.classList.remove('playing-music');
+        if (musicIcons) musicIcons.classList.remove('playing-music');
+    }
+
+
+    var ratingStorageKey = 'nerd_ratings';
+
+    function readRatings() {
+        try {
+            return JSON.parse(localStorage.getItem(ratingStorageKey) || '{}');
+        } catch (e) {
+            return {};
         }
     }
 
-    //#region Star Rating System
-    var ratingStorageKey = 'nerd_ratings';
-    
-    function readRatings() {
-        try { 
-            return JSON.parse(localStorage.getItem(ratingStorageKey) || '{}'); 
-        } catch (e) { 
-            return {}; 
-        }
-    }
-    
     function writeRatings(ratings) {
         localStorage.setItem(ratingStorageKey, JSON.stringify(ratings));
     }
-    
+
     function getRatingForItem(itemId) {
         var ratings = readRatings();
         return ratings[itemId] || 0;
     }
-    
+
     function setRatingForItem(itemId, rating) {
         var ratings = readRatings();
         ratings[itemId] = rating;
         writeRatings(ratings);
     }
-    
+
     function initializeStarRating(ratingContainer) {
         var itemId = ratingContainer.closest('.card').getAttribute('data-title');
         var currentRating = getRatingForItem(itemId);
-        
-        // Set initial rating
+
+
         updateStarDisplay(ratingContainer, currentRating);
-        
+
         var stars = ratingContainer.querySelectorAll('.star');
         stars.forEach(function(star, index) {
             star.addEventListener('mouseenter', function() {
                 highlightStars(ratingContainer, index + 1);
             });
-            
+
             star.addEventListener('mouseleave', function() {
                 updateStarDisplay(ratingContainer, currentRating);
             });
-            
+
             star.addEventListener('click', function() {
                 var newRating = index + 1;
                 currentRating = newRating;
                 setRatingForItem(itemId, newRating);
                 updateStarDisplay(ratingContainer, newRating);
-                
+
                 ratingContainer.classList.add('rating-clicked');
                 setTimeout(function() {
                     ratingContainer.classList.remove('rating-clicked');
                 }, 400);
-                
+
                 ratingContainer.classList.add('pulsing');
                 setTimeout(function() {
                     ratingContainer.classList.remove('pulsing');
@@ -73,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     function highlightStars(ratingContainer, rating) {
         var stars = ratingContainer.querySelectorAll('.star');
         stars.forEach(function(star, index) {
@@ -84,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     function updateStarDisplay(ratingContainer, rating) {
         var stars = ratingContainer.querySelectorAll('.star');
         stars.forEach(function(star, index) {
@@ -94,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     function attachStarRatingHandlers(scope) {
         var ratingContainers = (scope || document).querySelectorAll('.rating');
         ratingContainers.forEach(function(container) {
@@ -104,9 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    //#endregion
-   
-    //#region Favourites
+
+
+
     var storageKey = 'nerd_favourites';
     function readFavs() {
         try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch (e) { return []; }
@@ -122,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             writeFavs(favs);
         }
     }
-    
+
     var addButtons = document.querySelectorAll('.add-fav');
     addButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -134,28 +147,28 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = true;
         });
     });
-    //#endregion
-    
-    //#region Search (Legacy - DISABLED to prevent conflicts with jQuery search)
-    // This section is disabled to prevent conflicts with the new jQuery search system
-    // The main search functionality is now handled by jQuery in search.js
-    
-    // var input = document.getElementById('searchInput');
-    // var btn = document.getElementById('searchBtn');
-    
-    // function applySearch() {
-    //     var q = (input.value || '').toLowerCase().trim();
-    //     var cards = document.querySelectorAll('.card[data-title]');
-    //     cards.forEach(function (card) {
-    //         var title = card.getAttribute('data-title').toLowerCase();
-    //         card.style.display = title.indexOf(q) !== -1 ? '' : 'none';
-    //     });
-    // }
-    
-    // Note: All search functionality is now handled by jQuery search system
-    //#endregion
-   
-    //#region Internationalization (i18n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     var translations = {
         en: {
             load_more: 'Load more',
@@ -185,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     var lang = localStorage.getItem('nerd_lang') || 'en';
-    
+
     function getDictByLang(code) {
         switch (code) {
             case 'ru':
@@ -195,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return translations.en;
         }
     }
-    
+
     function applyI18n() {
         var dict = getDictByLang(lang);
         document.querySelectorAll('[data-i18n]').forEach(function(el){
@@ -205,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var si = document.getElementById('searchInput');
         if (si && dict.search_placeholder) si.setAttribute('placeholder', dict.search_placeholder);
     }
-    
+
     var langBtn = document.getElementById('langToggle');
     if (langBtn) {
         langBtn.addEventListener('click', function(){
@@ -214,9 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
             applyI18n();
         });
     }
-    //#endregion
 
-    //#region Audio Playback
+
+
     function attachAudioHandlers(scope) {
         var imgsScoped = (scope || document).querySelectorAll('.card-img-top[data-audio]');
         imgsScoped.forEach(function (img) {
@@ -227,23 +240,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentAudio && currentAudio.src.includes(src)) {
                     stopCurrent();
                     if (card) card.classList.remove('playing');
+                    var bg = document.querySelector('.music-background');
+                    var contentEl = document.querySelector('.content');
+                    var welcomeBox = document.querySelector('.welcome-box');
+                    var musicIcons = document.querySelector('.music-icons');
+                    if (bg) bg.classList.remove('playing');
+                    if (contentEl) contentEl.classList.remove('playing-music');
+                    if (welcomeBox) welcomeBox.classList.remove('playing-music');
+                    if (musicIcons) musicIcons.classList.remove('playing-music');
                     return;
                 }
                 stopCurrent();
                 currentAudio = new Audio(src);
+                window.currentAudio = currentAudio;
+
+
+                if (window.updatePlayerTrackInfo && card) {
+                    window.updatePlayerTrackInfo(card);
+                }
+
                 var playPromise = currentAudio.play();
                 if (playPromise && typeof playPromise.catch === 'function') {
                     playPromise.catch(function(){});
                 }
                 document.querySelectorAll('.card.playing').forEach(function(c){ c.classList.remove('playing'); });
                 if (card) card.classList.add('playing');
-                currentAudio.addEventListener('ended', function(){ if (card) card.classList.remove('playing'); });
+
+                var bg = document.querySelector('.music-background');
+                if (bg) {
+                    bg.classList.add('playing');
+                    console.log('Music background activated');
+                } else {
+                    console.log('Music background element not found');
+                }
+
+                var contentEl = document.querySelector('.content');
+                var welcomeBox = document.querySelector('.welcome-box');
+                var musicIcons = document.querySelector('.music-icons');
+                if (contentEl) contentEl.classList.add('playing-music');
+                if (welcomeBox) welcomeBox.classList.add('playing-music');
+                if (musicIcons) musicIcons.classList.add('playing-music');
+
+                currentAudio.addEventListener('ended', function(){
+                    if (card) card.classList.remove('playing');
+                    if (bg) bg.classList.remove('playing');
+                    var contentEl = document.querySelector('.content');
+                    var welcomeBox = document.querySelector('.welcome-box');
+                    var musicIcons = document.querySelector('.music-icons');
+                    if (contentEl) contentEl.classList.remove('playing-music');
+                    if (welcomeBox) welcomeBox.classList.remove('playing-music');
+                    if (musicIcons) musicIcons.classList.remove('playing-music');
+
+
+                    if (window.playNextTrack) {
+                        setTimeout(function() {
+                            window.playNextTrack();
+                        }, 500);
+                    }
+                });
             });
         });
     }
-    //#endregion
 
-    //#region Page Rendering
+
+
     function renderMore(items) {
         var container = document.getElementById('moreContainer');
         if (!container) return;
@@ -266,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 + '</div></div>';
             container.appendChild(col);
         });
-        
+
         var newBtns = container.querySelectorAll('.add-fav');
         newBtns.forEach(function(btn){
             if (btn._favBound) return; btn._favBound = true;
@@ -279,16 +339,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = true;
             });
         });
-        
-        // Attach handlers to the new content
+
+
         attachAudioHandlers(document.getElementById('moreContainer'));
         attachStarRatingHandlers(document.getElementById('moreContainer'));
     }
-    //#endregion
 
-    //#region Event Listeners
-    
-    // Nav Links Accessibility
+
+
+
+
     var navLinks = document.querySelectorAll('.navbar .nav-link');
     console.log(navLinks+"dsasad");
     navLinks.forEach(function(link, index){
@@ -305,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Load More Button
+
     var loadBtn = document.getElementById('loadMore');
     if (loadBtn) {
         var loaded = false;
@@ -326,11 +386,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
-    //#endregion
 
-    
+
+
     applyI18n();
     attachStarRatingHandlers(document);
     attachAudioHandlers(document);
+
+    window.attachStarRatingHandlers = attachStarRatingHandlers;
+    window.attachAudioHandlers = attachAudioHandlers;
+    window.addToFav = addToFav;
+    window.currentAudio = currentAudio;
 
 });

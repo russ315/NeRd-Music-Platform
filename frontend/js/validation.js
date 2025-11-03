@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             console.log('Form is valid and ready to be submitted.');
-            form.reset(); 
+            form.reset();
         }
     });
 
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (usernameValue === '') {
             setError(username, 'Username is required');
             isValid = false;
-        } else if (usernameValue != undefined) 
+        } else if (usernameValue != undefined)
         {
             setSuccess(username);
         }
