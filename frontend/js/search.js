@@ -95,42 +95,66 @@ $(document).ready(function() {
 
         clearSearchHighlighting();
 
-        if (!$musicCards || $musicCards.length === 0) {
-            console.log('No music cards found');
-            if (searchTerm.length >= searchConfig.minSearchLength) {
-                hideCarousel();
-                hideSearchResults();
-                showNoResultsMessage(false, searchTerm);
-            }
-            return;
+        // First check local cards
+        if ($musicCards && $musicCards.length > 0) {
+            console.log('Found ' + $musicCards.length + ' local cards, searching for: "' + searchTerm + '"');
+            
+            const seenTitles = new Set();
+            $musicCards.each(function() {
+                const $card = $(this);
+                const titleAttr = $card.attr('data-title');
+
+                if (!titleAttr) {
+                    return;
+                }
+
+                if (seenTitles.has(titleAttr)) {
+                    return;
+                }
+
+                const title = titleAttr.toLowerCase();
+                const cardText = $card.text().toLowerCase();
+                const artist = $card.attr('data-artist') || '';
+
+                if (title.includes(searchTerm) || 
+                    cardText.includes(searchTerm) || 
+                    artist.toLowerCase().includes(searchTerm)) {
+                    console.log('Local match found: ' + titleAttr);
+                    matchingCards.push($card);
+                    seenTitles.add(titleAttr);
+                    hasResults = true;
+                }
+            });
         }
 
-        console.log('Found ' + $musicCards.length + ' cards, searching for: "' + searchTerm + '"');
-
-        const seenTitles = new Set();
-
-        $musicCards.each(function() {
-            const $card = $(this);
-            const titleAttr = $card.attr('data-title');
-
-            if (!titleAttr) {
-                return;
-            }
-
-            if (seenTitles.has(titleAttr)) {
-                return;
-            }
-
-            const title = titleAttr.toLowerCase();
-            const cardText = $card.text().toLowerCase();
-
-            if (title.includes(searchTerm) || cardText.includes(searchTerm)) {
-                console.log('Match found: ' + titleAttr);
-                matchingCards.push($card);
-                seenTitles.add(titleAttr);
-                hasResults = true;
-            }
-        });
+        // Then check API tracks if they exist
+        if (window.APITracks && window.APITracks.length > 0) {
+            console.log('Found ' + window.APITracks.length + ' API tracks to search');
+            
+            const seenApiTitles = new Set();
+            window.APITracks.forEach(track => {
+                if (!track) return;
+                
+                const title = track.title ? track.title.toLowerCase() : '';
+                const artist = track.artist ? track.artist.name.toLowerCase() : '';
+                const album = track.album ? track.album.title.toLowerCase() : '';
+                
+                if (title.includes(searchTerm) || 
+                    artist.includes(searchTerm) || 
+                    album.includes(searchTerm)) {
+                    
+                    if (!seenApiTitles.has(track.id)) {
+                        console.log('API match found: ' + track.title);
+                        const $card = createApiTrackCard(track);
+                        if ($card) {
+                            matchingCards.push($card);
+                            seenApiTitles.add(track.id);
+                            hasResults = true;
+                        }
+                    }
+                }
+            });
+        }
 
         console.log('Total unique matches: ' + matchingCards.length);
 
@@ -483,11 +507,256 @@ $(document).ready(function() {
         initializeRealTimeSearch();
         initializeAutocomplete();
         initializeSearchHighlighting();
-        initializeAdvancedSearch();
+});
+}
 
-        console.log('jQuery Search System initialized successfully!');
+function highlightSearchTerms(searchTerm) {
+clearSearchHighlighting();
+
+if (searchTerm.length < searchConfig.minSearchLength) return;
+
+$('#searchResults .card-text').each(function() {
+    const $element = $(this);
+    highlightTextInElement($element, searchTerm);
+});
+
+$('.card[data-title].search-filtered .card-text').each(function() {
+    const $element = $(this);
+    highlightTextInElement($element, searchTerm);
+});
+
+$('.accordion-content p').each(function() {
+    const $element = $(this);
+    highlightTextInElement($element, searchTerm);
+});
+
+$('.accordion-header').each(function() {
+    const $element = $(this);
+    highlightTextInElement($element, searchTerm);
+});
+}
+
+function highlightTextInElement($element, searchTerm) {
+if ($element.find(`.${searchConfig.highlightClass}`).length > 0) {
+    return;
+}
+
+const text = $element.text();
+const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+
+if (regex.test(text)) {
+    const highlightedText = text.replace(regex, `<span class="${searchConfig.highlightClass}">$1</span>`);
+    $element.html(highlightedText);
+}
+}
+
+function highlightText(text, searchTerm) {
+const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+return text.replace(regex, `<span class="${searchConfig.highlightClass}">$1</span>`);
+}
+
+function clearSearchHighlighting() {
+$(`.${searchConfig.highlightClass}`).each(function() {
+    $(this).replaceWith($(this).text());
+});
+
+$('.card[data-title]').each(function() {
+    const $card = $(this);
+    if ($card.hasClass('search-filtered')) {
+        $card.show();
+    }
+});
+}
+
+function escapeRegExp(string) {
+return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function initializeAdvancedSearch() {
+$('.genre-filter').on('click', function() {
+    const genre = $(this).data('genre');
+    $('#searchInput').val(genre);
+    performRealTimeFilter(genre.toLowerCase(), $('.card[data-title]'));
+});
+
+const searchHistory = JSON.parse(localStorage.getItem('nerd_search_history') || '[]');
+
+$('#searchInput').on('keypress', function(e) {
+    if (e.which === 13) {
+        const searchTerm = $(this).val().trim();
+        if (searchTerm && !searchHistory.includes(searchTerm)) {
+            searchHistory.unshift(searchTerm);
+            if (searchHistory.length > 10) {
+                searchHistory.pop();
+            }
+            localStorage.setItem('nerd_search_history', JSON.stringify(searchHistory));
+        }
+    }
+});
+
+$('#searchInput').on('focus', function() {
+    if (searchHistory.length > 0) {
+        showSearchHistory(searchHistory);
+    }
+});
+}
+
+function showSearchHistory(history) {
+const $suggestions = $('#searchSuggestions');
+let historyHtml = '<div class="suggestion-section"><div class="suggestion-header">Recent Searches</div>';
+
+history.slice(0, 5).forEach(term => {
+    historyHtml += `<div class="suggestion-item history-item" data-title="${term}">${term}</div>`;
+});
+
+historyHtml += '</div>';
+$suggestions.html(historyHtml).show();
+}
+
+function initializeSearchSystem() {
+console.log('Initializing jQuery Search System...');
+
+const $searchInput = $('#searchInput');
+const $musicCards = $('.card[data-title]');
+
+if ($searchInput.length === 0) {
+    console.error('Search input not found!');
+    return;
+}
+
+if ($musicCards.length === 0) {
+    console.error('No music cards found!');
+    return;
+}
+
+console.log(`Found ${$musicCards.length} music cards`);
+
+initializeRealTimeSearch();
+initializeAutocomplete();
+initializeSearchHighlighting();
+initializeAdvancedSearch();
+
+console.log('jQuery Search System initialized successfully!');
+}
+
+function createApiTrackCard(track) {
+if (!track) return null;
+
+const artistName = track.artist?.name || 'Unknown Artist';
+const albumTitle = track.album?.title || 'Unknown Album';
+const coverUrl = track.album?.cover_medium || 'frontend/src/img/default-cover.png';
+const previewUrl = track.preview || '';
+
+const $card = $(`
+    <div class="card api-track-card" data-id="${track.id}" data-title="${track.title}" data-artist="${artistName}">
+        <img src="${coverUrl}" 
+             class="card-img-top" 
+             alt="${track.title}"
+             data-audio="${previewUrl}">
+        <div class="card-body">
+            <h5 class="card-title">${track.title_short || track.title || 'Unknown Track'}</h5>
+            <p class="card-text">${artistName}</p>
+            <p class="card-text"><small class="text-muted">${albumTitle}</small></p>
+            <button class="btn btn-sm btn-warning add-fav" 
+                    data-id="${track.id}" 
+                    data-title="${track.title}" 
+                    data-img="${coverUrl}">
+                Add to Favorites
+            </button>
+        </div>
+    </div>
+`);
+
+// Initialize event handlers for the new card
+initializeCardEventHandlers($card);
+
+return $card;
+}
+
+function initializeCardEventHandlers($card) {
+// Handle audio playback
+$card.find('.card-img-top').on('click', function() {
+    const src = $(this).data('audio');
+    if (!src) return;
+
+    if (window.currentAudio && window.currentAudio.src.includes(src)) {
+        if (window.currentAudio.paused) {
+            window.currentAudio.play();
+            $card.addClass('playing');
+        } else {
+            window.currentAudio.pause();
+            $card.removeClass('playing');
+        }
+        return;
     }
 
-    initializeSearchSystem();
+    if (window.currentAudio) {
+        window.currentAudio.pause();
+        window.currentAudio.currentTime = 0;
+        $('.card.playing').removeClass('playing');
+    }
 
+    window.currentAudio = new Audio(src);
+    const storedVolume = localStorage.getItem('nerd_volume');
+    window.currentAudio.volume = storedVolume ? parseFloat(storedVolume) / 100 : 0.7;
+
+    window.currentAudio.play();
+    $card.addClass('playing');
+
+    window.currentAudio.onended = function() {
+        $card.removeClass('playing');
+        if (window.playNextTrack) {
+            window.playNextTrack();
+        }
+    };
+
+    if (window.updatePlayerTrackInfo) {
+        window.updatePlayerTrackInfo($card[0]);
+    }
 });
+
+// Handle favorite button
+$card.find('.add-fav').on('click', function(e) {
+    e.stopPropagation();
+    const $btn = $(this);
+    const id = $btn.data('id');
+    const title = $btn.data('title');
+    const img = $btn.data('img');
+
+    if (typeof window.addToFav === 'function') {
+        const success = window.addToFav({ id, title, img });
+        if (success) {
+            $btn.text('✓ In Favorites').addClass('btn-success').removeClass('btn-warning');
+        }
+    }
+});
+}
+
+// Store API tracks when they are loaded
+$(document).on('apiTracksLoaded', function(event, tracks) {
+window.APITracks = tracks || [];
+console.log('API tracks loaded for search:', window.APITracks.length);
+});
+
+// Initialize the search system
+initializeSearchSystem();
+
+// Set up a mutation observer to handle dynamically loaded content
+const observer = new MutationObserver(function(mutations) {
+mutations.forEach(function(mutation) {
+    if (mutation.addedNodes.length) {
+        // Re-initialize search for any new content
+        const $searchInput = $('#searchInput');
+        if ($searchInput.length && $searchInput.val().trim().length >= searchConfig.minSearchLength) {
+            const searchTerm = $searchInput.val().toLowerCase().trim();
+            const $musicCards = $('.card[data-title]');
+            performRealTimeFilter(searchTerm, $musicCards);
+        }
+    }
+});
+});
+
+// Start observing the document with the configured parameters
+observer.observe(document.body, { childList: true, subtree: true });
+
+console.log('Search system initialized with API track support');
