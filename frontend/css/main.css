@@ -1146,6 +1146,79 @@ footer .accordion-content p {
 
 
 
+@media (max-width: 426px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  footer {
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 15px 0 !important;
+    text-align: center !important;
+    overflow-x: hidden;
+  }
+  
+  footer .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
+  
+  footer .row {
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    --bs-gutter-x: 0 !important;
+  }
+  
+  footer .col-12,
+  footer [class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+  
+  footer h5,
+  footer #datetime-container,
+  footer .feature-box,
+  footer .pt-3 {
+    width: 100% !important;
+    margin: 8px auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+  
+  footer .feature-btn {
+    width: auto !important;
+    max-width: 280px !important;
+    margin: 8px auto !important;
+    display: block !important;
+    text-align: center !important;
+  }
+  
+  footer .accordion-item {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 5px auto !important;
+  }
+  
+  footer .accordion-header {
+    width: 100% !important;
+    text-align: left !important;
+  }
+  
+  footer .accordion-content {
+    width: 100% !important;
+    text-align: left !important;
+  }
+}
+
 
 .scroll-progress-container {
   position: fixed;
@@ -2038,6 +2111,26 @@ footer .accordion-content p {
 [data-theme="light"] .player-btn-main:hover {
     background: var(--accent);
     color: var(--bg-primary);
+}
+
+[data-theme="light"] .player-progress-fill,
+[data-theme="light"] .player-volume-fill {
+    background: #7E9E00 !important;
+}
+
+[data-theme="light"] .player-progress-slider::-webkit-slider-thumb,
+[data-theme="light"] .player-volume-slider::-webkit-slider-thumb {
+    background: #7E9E00 !important;
+}
+
+[data-theme="light"] .player-progress-slider::-moz-range-thumb,
+[data-theme="light"] .player-volume-slider::-moz-range-thumb {
+    background: #7E9E00 !important;
+}
+
+[data-theme="light"] .player-progress-bar:hover .player-progress-fill::after,
+[data-theme="light"] .player-volume-bar:hover::after {
+    background: #7E9E00 !important;
 }
 
 

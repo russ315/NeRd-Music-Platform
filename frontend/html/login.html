@@ -42,44 +42,39 @@
     </div>
 </div>
 
-<footer class="bg-dark text-light border-top border-secondary mt-auto">
-  <div class="container py-4">
-    <div class="row g-3">
-      <div class="col-12 col-md-4">
-        <h5>NeRd</h5>
-        <div id="datetime-container"></div>
-        <div class="feature-box">
-          <button id="open-popup-btn" class="feature-btn">Subscribe to our Newsletter</button>
-        </div>
+<footer class="auth-footer">
+  <div class="auth-footer__inner">
+    <div class="auth-footer__brand">
+      <h5>NeRd</h5>
+      <div id="datetime-container"></div>
+      <button id="open-popup-btn" class="feature-btn auth-footer__cta">Subscribe to our Newsletter</button>
+    </div>
+    <div class="auth-footer__faq">
+      <div class="accordion-item">
+        <button class="accordion-header">How do I create a playlist?</button>
+        <div class="accordion-content"><p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p></div>
       </div>
-      <div class="col-12 col-md-8">
-        <div class="accordion-item">
-          <button class="accordion-header w-100">How do I create a playlist?</button>
-          <div class="accordion-content"><p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p></div>
-        </div>
-        <div class="accordion-item">
-          <button class="accordion-header w-100">Can I use this platform offline?</button>
-          <div class="accordion-content"><p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p></div>
-        </div>
-        <div class="accordion-item">
-          <button class="accordion-header w-100">How is my data protected?</button>
-          <div class="accordion-content"><p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p></div>
-        </div>
+      <div class="accordion-item">
+        <button class="accordion-header">Can I use this platform offline?</button>
+        <div class="accordion-content"><p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-header">How is my data protected?</button>
+        <div class="accordion-content"><p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p></div>
       </div>
     </div>
-
-    <div id="popup-overlay">
-      <div class="popup-content">
-        <span id="close-popup-btn">&times;</span>
-        <h3>Subscribe Now</h3>
-        <p>Get the latest music news and updates directly in your inbox.</p>
-        <form>
-          <input type="email" placeholder="Enter your email" required>
-          <button type="submit" class="feature-btn">Subscribe</button>
-        </form>
-      </div>
+    <div class="auth-footer__credit">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
+  </div>
+  <div id="popup-overlay" class="auth-footer__overlay">
+    <div class="popup-content">
+      <span id="close-popup-btn">&times;</span>
+      <h3>Subscribe Now</h3>
+      <p>Get the latest music news and updates directly in your inbox.</p>
+      <form>
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit" class="feature-btn">Subscribe</button>
+      </form>
     </div>
-    <div class="pt-3">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
