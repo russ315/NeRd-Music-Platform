@@ -21,7 +21,13 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="favourite.html">Favourites</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
                 </ul>
+                
+                <div class="btn-group">
+                    <a class="btn btn-outline-secondary text-light" href="login.html">Login</a>
+                    <a class="btn btn-warning" href="register.html">Sign Up</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -81,13 +87,33 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/favorites-manager.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/shared-ux.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var key = 'nerd_favourites';
-        function readFavs() { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; } }
-        var list = readFavs();
+        // Check if user is logged in
+        if (!window.FavoritesManager || !window.FavoritesManager.isUserLoggedIn()) {
+            // User not logged in - show message
+            var grid = document.getElementById('favouritesGrid');
+            var emptyWrap = document.createElement('div');
+            emptyWrap.className = 'text-center text-secondary py-5';
+            emptyWrap.innerHTML = `
+                <div class="mb-3">
+                    <i style="font-size: 3rem; color: #666;">🔒</i>
+                </div>
+                <h4>Login Required</h4>
+                <p>Please login to view your favorite tracks</p>
+                <a href="login.html" class="btn btn-warning">Login</a>
+                <a href="register.html" class="btn btn-outline-secondary ms-2">Sign Up</a>
+            `;
+            grid.parentNode.appendChild(emptyWrap);
+            return;
+        }
+
+        // Get user's favorites
+        var list = window.FavoritesManager.readUserFavorites();
         var grid = document.getElementById('favouritesGrid');
         grid.innerHTML = '';
         
@@ -162,22 +188,22 @@
     });
     
     function removeFromFavorites(itemId) {
-        var key = 'nerd_favourites';
-        var list = JSON.parse(localStorage.getItem(key) || '[]');
-        var filteredList = list.filter(function(item) {
-            return item.id !== itemId;
-        });
-        localStorage.setItem(key, JSON.stringify(filteredList));
+        if (!window.FavoritesManager) return;
         
-        // Show notification
-        if (window.showNotification) {
-            showNotification('Removed', 'Track removed from favorites', 'success', 2000);
+        // Remove from user's favorites
+        const success = window.FavoritesManager.removeFromUserFavorites(itemId);
+        
+        if (success) {
+            // Show notification
+            if (window.showNotification) {
+                showNotification('Removed', 'Track removed from favorites', 'success', 2000);
+            }
+            
+            // Reload the page to update the display
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
         }
-        
-        // Reload the page to update the display
-        setTimeout(function() {
-            location.reload();
-        }, 1000);
     }
     </script>
 </body>

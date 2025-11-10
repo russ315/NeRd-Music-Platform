@@ -66,39 +66,38 @@
 
 
     function updatePlayerUI() {
-        if (currentTrackInfo.img && playerAlbumArt) {
-
+        // Hide album art if no track or no image
+        if (!currentTrackInfo.img || !currentTrackInfo.title) {
+            if (playerAlbumArt) {
+                playerAlbumArt.style.display = 'none';
+                playerAlbumArt.src = '';
+            }
+        } else if (currentTrackInfo.img && playerAlbumArt) {
+            // Show album art with proper image
             playerAlbumArt.classList.remove('lazy-image', 'lazy-loaded');
             playerAlbumArt.removeAttribute('data-src');
             playerAlbumArt.removeData && playerAlbumArt.removeData('lazy-processed');
 
-
             const imgSrc = currentTrackInfo.img;
-            if (imgSrc) {
 
-                const preloadImg = new Image();
-                preloadImg.onload = function() {
-                    if (playerAlbumArt) {
-                        playerAlbumArt.src = imgSrc;
-                        playerAlbumArt.style.opacity = '1';
-                        playerAlbumArt.style.display = 'block';
-                    }
-                };
-                preloadImg.onerror = function() {
-                    if (playerAlbumArt) {
-                        playerAlbumArt.style.display = 'none';
-                    }
-                };
-                preloadImg.src = imgSrc;
+            const preloadImg = new Image();
+            preloadImg.onload = function() {
+                if (playerAlbumArt) {
+                    playerAlbumArt.src = imgSrc;
+                    playerAlbumArt.style.opacity = '1';
+                    playerAlbumArt.style.display = 'block';
+                }
+            };
+            preloadImg.onerror = function() {
+                if (playerAlbumArt) {
+                    playerAlbumArt.style.display = 'none';
+                    playerAlbumArt.src = '';
+                }
+            };
+            preloadImg.src = imgSrc;
 
-
-                playerAlbumArt.src = imgSrc;
-                playerAlbumArt.style.display = 'block';
-            } else {
-                playerAlbumArt.style.display = 'none';
-            }
-        } else if (playerAlbumArt) {
-            playerAlbumArt.style.display = 'none';
+            playerAlbumArt.src = imgSrc;
+            playerAlbumArt.style.display = 'block';
         }
 
         if (playerTrackTitle) {
