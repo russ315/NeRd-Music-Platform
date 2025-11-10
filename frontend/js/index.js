@@ -105,23 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
    
     function addToFav(item) {
-        // Check if FavoritesManager is available
         if (typeof window.FavoritesManager === 'undefined') {
             console.error('FavoritesManager not loaded');
             return false;
         }
 
-        // Check if user is logged in
         if (!window.FavoritesManager.isUserLoggedIn()) {
             alert('Please login to add favorites');
-            // Redirect to login page
             setTimeout(function() {
                 window.location.href = 'frontend/html/login.html';
             }, 1000);
             return false;
         }
 
-        // Add to user's favorites
         const success = window.FavoritesManager.addToUserFavorites(item);
         
         if (success && window.showNotification) {
@@ -131,23 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return success;
     }
 
-    /**
-     * Update favorite button state based on user's favorites
-     */
     function updateFavoriteButton(btn) {
         if (typeof window.FavoritesManager === 'undefined') return;
         
         const itemId = btn.getAttribute('data-id');
         
         if (!window.FavoritesManager.isUserLoggedIn()) {
-            // User not logged in - show login prompt
             btn.textContent = '🔒 Login to Favorite';
             btn.classList.add('btn-secondary');
             btn.classList.remove('btn-warning');
             return;
         }
         
-        // Check if already in favorites
         if (window.FavoritesManager.isInUserFavorites(itemId)) {
             btn.textContent = '✓ In Favorites';
             btn.disabled = true;
@@ -156,16 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    /**
-     * Attach favorite button handlers
-     */
     function attachFavoriteHandlers(scope) {
         var addButtons = (scope || document).querySelectorAll('.add-fav');
         addButtons.forEach(function (btn) {
             if (btn._favHandlerAttached) return;
             btn._favHandlerAttached = true;
             
-            // Update initial button state
             updateFavoriteButton(btn);
             
             btn.addEventListener('click', function () {
@@ -184,28 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    //#endregion
-    
-    //#region Search (Legacy - DISABLED to prevent conflicts with jQuery search)
-    // This section is disabled to prevent conflicts with the new jQuery search system
-    // The main search functionality is now handled by jQuery in search.js
-    
-    // var input = document.getElementById('searchInput');
-    // var btn = document.getElementById('searchBtn');
-    
-    // function applySearch() {
-    //     var q = (input.value || '').toLowerCase().trim();
-    //     var cards = document.querySelectorAll('.card[data-title]');
-    //     cards.forEach(function (card) {
-    //         var title = card.getAttribute('data-title').toLowerCase();
-    //         card.style.display = title.indexOf(q) !== -1 ? '' : 'none';
-    //     });
-    // }
-    
-    // Note: All search functionality is now handled by jQuery search system
-    //#endregion
    
-    //#region Internationalization (i18n)
+    
     var translations = {
         en: {
             load_more: 'Load more',
@@ -264,9 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
             applyI18n();
         });
     }
-    //#endregion
 
-    //#region Audio Playback
+    
     function attachAudioHandlers(scope) {
         var imgsScoped = (scope || document).querySelectorAll('.card-img-top[data-audio]');
         imgsScoped.forEach(function (img) {
@@ -282,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 stopCurrent();
                 window.currentAudio = new Audio(src);
                 
-                // Apply stored volume
                 const storedVolume = localStorage.getItem('nerd_volume');
                 if (storedVolume !== null) {
                     window.currentAudio.volume = parseFloat(storedVolume) / 100;
@@ -299,22 +264,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.currentAudio.addEventListener('ended', function(){ 
                     if (card) card.classList.remove('playing');
                     
-                    // Auto-play next track
                     if (window.playNextTrack) {
                         window.playNextTrack();
                     }
                 });
                 
-                // Update player track info
                 if (window.updatePlayerTrackInfo) {
                     window.updatePlayerTrackInfo(card);
                 }
             });
         });
     }
-    //#endregion
 
-    //#region Page Rendering
+    
     function renderMore(items) {
         var container = document.getElementById('moreContainer');
         if (!container) return;
@@ -338,18 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(col);
         });
         
-        // Attach handlers to the new content
         attachFavoriteHandlers(container);
         attachAudioHandlers(container);
         attachStarRatingHandlers(container);
     }
-    //#endregion
 
-    //#region Event Listeners
     
-    // Nav Links Accessibility
+    
     var navLinks = document.querySelectorAll('.navbar .nav-link');
-    console.log(navLinks+"dsasad");
     navLinks.forEach(function(link, index){
         link.addEventListener('keydown', function(e){
             if (e.key === 'ArrowRight' || e.key === 'Right') {
@@ -364,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Load More Button
     var loadBtn = document.getElementById('loadMore');
     if (loadBtn) {
         var loaded = false;
@@ -385,25 +342,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         });
     }
-    //#endregion
 
     
-    //#region External API Integration
-    /**
-     * Load tracks from external API (Deezer)
-     */
     async function loadExternalTracks() {
-        // Check if MusicAPI is available
         if (typeof window.MusicAPI === 'undefined') {
             console.warn('MusicAPI not loaded, skipping external content');
             return;
         }
 
         try {
-            // Show loading indicator
             showAPILoadingState();
 
-            // Check API status first
             const isAPIAvailable = await window.MusicAPI.checkAPIStatus();
             
             if (!isAPIAvailable) {
@@ -412,14 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Fetch top chart tracks
             const topTracks = await window.MusicAPI.fetchTopCharts(12);
             
             if (topTracks && topTracks.length > 0) {
                 renderAPITracks(topTracks);
                 hideAPILoadingState();
                 
-                // Show success notification
                 if (window.showNotification) {
                     showNotification('API Connected', `Loaded ${topTracks.length} tracks from Deezer`, 'success', 3000);
                 }
@@ -430,16 +377,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error loading external tracks:', error);
             hideAPILoadingState();
             
-            // Show error notification
             if (window.showNotification) {
                 showNotification('API Error', 'Unable to load external content', 'error', 3000);
             }
         }
     }
 
-    /**
-     * Show loading state for API content
-     */
     function showAPILoadingState() {
         const moreContainer = document.getElementById('moreContainer');
         if (!moreContainer) return;
@@ -456,9 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
         moreContainer.appendChild(loadingDiv);
     }
 
-    /**
-     * Hide loading state
-     */
     function hideAPILoadingState() {
         const loadingDiv = document.getElementById('apiLoadingState');
         if (loadingDiv) {
@@ -466,14 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Render tracks from API
-     */
     function renderAPITracks(tracks) {
         const container = document.getElementById('moreContainer');
         if (!container) return;
 
-        // Add section header
         const headerDiv = document.createElement('div');
         headerDiv.className = 'col-12 mt-4 mb-2';
         headerDiv.innerHTML = `
@@ -513,30 +449,22 @@ document.addEventListener('DOMContentLoaded', () => {
             container.appendChild(col);
         });
 
-        // Attach handlers to API content
         attachFavoriteHandlers(container);
         attachAudioHandlers(container);
         attachStarRatingHandlers(container);
     }
 
-    /**
-     * Initialize API integration
-     */
     function initializeAPIIntegration() {
-        // Load external tracks after a short delay to not block initial page load
         setTimeout(function() {
             loadExternalTracks();
         }, 1000);
     }
-    //#endregion
 
     
     applyI18n();
     attachStarRatingHandlers(document);
     attachAudioHandlers(document);
     attachFavoriteHandlers(document);
-    
-    // Initialize API integration
     initializeAPIIntegration();
 
 });
