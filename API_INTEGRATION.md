@@ -1,7 +1,7 @@
 # External API Integration Documentation
 
 ## Overview
-The NeRd Music Platform integrates with the **Deezer API** to provide real music data, including trending tracks, artist information, and 30-second audio previews.
+The NeRuaD Music Platform integrates with the **Deezer API** to provide real music data, including trending tracks, artist information, and 30-second audio previews.
 
 ## Features
 

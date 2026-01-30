@@ -1,4 +1,4 @@
-# NeRd Music Platform
+# NeRuaD Music Platform
 
 A modern web-based music streaming platform with user authentication, favorites management, and external API integration.
 
@@ -70,7 +70,7 @@ A modern web-based music streaming platform with user authentication, favorites 
 ## Project Structure
 
 ```
-NeRd-Music-Platform/
+NeRuaD-Music-Platform/
 ├── frontend/
 │   ├── css/
 │   │   ├── main.css
@@ -160,13 +160,13 @@ API requests are proxied through `corsproxy.io` to handle CORS restrictions.
 ## Data Storage
 
 All user data is stored in browser's localStorage:
-- `nerd_auth` - Authentication status
-- `nerd_user` - User information
-- `nerd_profile` - Profile data
-- `nerd_favourites_[email]` - User-specific favorites
-- `nerd_ratings` - Track ratings
-- `nerd_volume` - Player volume setting
-- `nerd_lang` - Language preference
+- `NeRuaD_auth` - Authentication status
+- `NeRuaD_user` - User information
+- `NeRuaD_profile` - Profile data
+- `NeRuaD_favourites_[email]` - User-specific favorites
+- `NeRuaD_ratings` - Track ratings
+- `NeRuaD_volume` - Player volume setting
+- `NeRuaD_lang` - Language preference
 
 ## Browser Compatibility
 

@@ -81,8 +81,8 @@ function loadProfileData() {
 
 function getProfileFromStorage() {
     try {
-        var data = localStorage.getItem('nerd_profile');
-        var userData = localStorage.getItem('nerd_user');
+        var data = localStorage.getItem('NeRuaD_profile');
+        var userData = localStorage.getItem('NeRuaD_user');
         var oldData = userData ? JSON.parse(userData) : null;
         
         return data ? JSON.parse(data) : {
@@ -103,7 +103,7 @@ function getProfileFromStorage() {
 }
 
 function saveProfileToStorage(data) {
-    localStorage.setItem('nerd_profile', JSON.stringify(data));
+    localStorage.setItem('NeRuaD_profile', JSON.stringify(data));
 }
 
 function updateAvatarInitials(name) {
@@ -146,7 +146,7 @@ function animateCounter(elementId, target, suffix) {
 
 function calculateAverageRating() {
     try {
-        var ratings = JSON.parse(localStorage.getItem('nerd_ratings') || '{}');
+        var ratings = JSON.parse(localStorage.getItem('NeRuaD_ratings') || '{}');
         var values = Object.values(ratings);
         
         if (values.length === 0) {
@@ -248,7 +248,7 @@ function selectAvatarColor(color) {
 
 function loadSettings() {
     try {
-        var settings = JSON.parse(localStorage.getItem('nerd_settings') || '{}');
+        var settings = JSON.parse(localStorage.getItem('NeRuaD_settings') || '{}');
         
         if (settings.emailNotifications !== undefined) {
             document.getElementById('emailNotifications').checked = settings.emailNotifications;
@@ -269,9 +269,9 @@ function loadSettings() {
 
 function saveSettings(settingId, value) {
     try {
-        var settings = JSON.parse(localStorage.getItem('nerd_settings') || '{}');
+        var settings = JSON.parse(localStorage.getItem('NeRuaD_settings') || '{}');
         settings[settingId] = value;
-        localStorage.setItem('nerd_settings', JSON.stringify(settings));
+        localStorage.setItem('NeRuaD_settings', JSON.stringify(settings));
         
         showNotification('Success', 'Setting updated', 'success');
     } catch(e) {
@@ -288,10 +288,10 @@ function confirmDeleteAccount() {
         
         if (doubleConfirm) {
             // Clear all user data
-            localStorage.removeItem('nerd_profile');
-            localStorage.removeItem('nerd_favourites');
-            localStorage.removeItem('nerd_ratings');
-            localStorage.removeItem('nerd_settings');
+            localStorage.removeItem('NeRuaD_profile');
+            localStorage.removeItem('NeRuaD_favourites');
+            localStorage.removeItem('NeRuaD_ratings');
+            localStorage.removeItem('NeRuaD_settings');
             
             showNotification('Account Deleted', 'Your account has been deleted', 'info');
             

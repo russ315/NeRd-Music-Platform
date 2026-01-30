@@ -264,7 +264,7 @@
         }
 
         if (volumeSlider) {
-            const storedVolume = localStorage.getItem('nerd_volume');
+            const storedVolume = localStorage.getItem('NeRuaD_volume');
             if (storedVolume !== null) {
                 volumeSlider.value = storedVolume;
             }
@@ -274,7 +274,7 @@
                 if (window.currentAudio) {
                     window.currentAudio.volume = volume;
                 }
-                localStorage.setItem('nerd_volume', this.value);
+                localStorage.setItem('NeRuaD_volume', this.value);
                 updateVolumeFill();
                 updateMuteButton();
             });
@@ -309,7 +309,7 @@
 
 
         if (volumeSlider && window.currentAudio) {
-            const storedVolume = localStorage.getItem('nerd_volume');
+            const storedVolume = localStorage.getItem('NeRuaD_volume');
             if (storedVolume !== null) {
                 window.currentAudio.volume = parseFloat(storedVolume) / 100;
             } else {

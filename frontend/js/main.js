@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('nerd_theme', theme);
+        localStorage.setItem('NeRuaD_theme', theme);
 
         if (themeToggle) {
             themeToggle.textContent = theme === 'light' ? '🌞' : '🌙';
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const storedTheme = localStorage.getItem('nerd_theme') || 'dark';
+    const storedTheme = localStorage.getItem('NeRuaD_theme') || 'dark';
     setTheme(storedTheme);
 
     if (themeToggle) {

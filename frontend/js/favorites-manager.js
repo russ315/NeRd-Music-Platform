@@ -3,10 +3,10 @@
 
     function getCurrentUser() {
         try {
-            const isAuth = localStorage.getItem('nerd_auth') === 'true';
+            const isAuth = localStorage.getItem('NeRuaD_auth') === 'true';
             if (!isAuth) return null;
             
-            const userData = localStorage.getItem('nerd_user');
+            const userData = localStorage.getItem('NeRuaD_user');
             return userData ? JSON.parse(userData) : null;
         } catch (e) {
             return null;
@@ -18,7 +18,7 @@
         if (!user) return null;
         
         const userId = user.email || user.username || 'guest';
-        return `nerd_favourites_${userId}`;
+        return `NeRuaD_favourites_${userId}`;
     }
 
     function isUserLoggedIn() {
@@ -127,7 +127,7 @@
         }
 
         try {
-            const oldFavorites = localStorage.getItem('nerd_favourites');
+            const oldFavorites = localStorage.getItem('NeRuaD_favourites');
             if (!oldFavorites) return;
 
             const userFavoritesKey = getUserFavoritesKey();

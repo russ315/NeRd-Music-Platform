@@ -2,12 +2,12 @@
     'use strict';
     
     function isLoggedIn() {
-        return localStorage.getItem('nerd_auth') === 'true';
+        return localStorage.getItem('NeRuaD_auth') === 'true';
     }
     
     function getUserData() {
         try {
-            const userData = localStorage.getItem('nerd_user');
+            const userData = localStorage.getItem('NeRuaD_user');
             return userData ? JSON.parse(userData) : null;
         } catch(e) {
             return null;
@@ -17,8 +17,8 @@
     function logout() {
         const confirmed = confirm('Are you sure you want to logout?');
         if (confirmed) {
-            localStorage.removeItem('nerd_auth');
-            localStorage.removeItem('nerd_user');
+            localStorage.removeItem('NeRuaD_auth');
+            localStorage.removeItem('NeRuaD_user');
             
             if (window.showNotification) {
                 showNotification('Logged Out', 'You have been logged out successfully', 'info', 2000);
@@ -93,9 +93,9 @@
     }
     
     // Make logout function globally available
-    window.nerdLogout = logout;
-    window.nerdIsLoggedIn = isLoggedIn;
-    window.nerdGetUserData = getUserData;
+    window.NeRuaDLogout = logout;
+    window.NeRuaDIsLoggedIn = isLoggedIn;
+    window.NeRuaDGetUserData = getUserData;
     
     // Initialize
     init();

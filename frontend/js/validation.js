@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     loggedIn: true,
                     loginDate: new Date().toISOString()
                 };
-                localStorage.setItem('nerd_user', JSON.stringify(userData));
-                localStorage.setItem('nerd_auth', 'true');
+                localStorage.setItem('NeRuaD_user', JSON.stringify(userData));
+                localStorage.setItem('NeRuaD_auth', 'true');
                 
                 // Save to profile as well
                 const profileData = {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     bio: '',
                     avatarColor: 'linear-gradient(135deg, #E8FF8A, #97fcad)'
                 };
-                localStorage.setItem('nerd_profile', JSON.stringify(profileData));
+                localStorage.setItem('NeRuaD_profile', JSON.stringify(profileData));
                 
                 alert('Registration successful!');
                 window.location.href = '../../index.html';
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     loggedIn: true,
                     loginDate: new Date().toISOString()
                 };
-                localStorage.setItem('nerd_user', JSON.stringify(userData));
-                localStorage.setItem('nerd_auth', 'true');
+                localStorage.setItem('NeRuaD_user', JSON.stringify(userData));
+                localStorage.setItem('NeRuaD_auth', 'true');
                 
                 alert('Login successful!');
                 window.location.href = '../../index.html';

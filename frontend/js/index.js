@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    var ratingStorageKey = 'nerd_ratings';
+    var ratingStorageKey = 'NeRuaD_ratings';
     
     function readRatings() {
         try { 
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             favourites: 'Favourites',
             login: 'Login',
             signup: 'Sign Up',
-            welcome_title: 'Welcome to NeRd!',
+            welcome_title: 'Welcome to NeRuaD!',
             welcome_sub: 'Your place for music',
             section_title: 'New Popular Music For You!',
             section_sub: 'Suggestions just for you based on your preferences.',
@@ -194,14 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
             favourites: 'Избранное',
             login: 'Войти',
             signup: 'Регистрация',
-            welcome_title: 'Добро пожаловать в NeRd!',
+            welcome_title: 'Добро пожаловать в NeRuaD!',
             welcome_sub: 'Твое место для музыки',
             section_title: 'Популярная музыка для тебя',
             section_sub: 'Рекомендации на основе твоих предпочтений.',
             search_placeholder: 'Поиск музыки'
         }
     };
-    var lang = localStorage.getItem('nerd_lang') || 'en';
+    var lang = localStorage.getItem('NeRuaD_lang') || 'en';
     
     function getDictByLang(code) {
         switch (code) {
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langBtn) {
         langBtn.addEventListener('click', function(){
             lang = lang === 'en' ? 'ru' : 'en';
-            localStorage.setItem('nerd_lang', lang);
+            localStorage.setItem('NeRuaD_lang', lang);
             applyI18n();
         });
     }
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stopCurrent();
                 window.currentAudio = new Audio(src);
                 
-                const storedVolume = localStorage.getItem('nerd_volume');
+                const storedVolume = localStorage.getItem('NeRuaD_volume');
                 if (storedVolume !== null) {
                     window.currentAudio.volume = parseFloat(storedVolume) / 100;
                 } else {

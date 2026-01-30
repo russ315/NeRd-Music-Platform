@@ -213,7 +213,7 @@ $(document).ready(function() {
             }
             
             window.currentAudio = new Audio(src);
-            const storedVolume = localStorage.getItem('nerd_volume');
+            const storedVolume = localStorage.getItem('NeRuaD_volume');
             window.currentAudio.volume = storedVolume ? parseFloat(storedVolume) / 100 : 0.7;
             
             window.currentAudio.play();

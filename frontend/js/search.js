@@ -264,13 +264,13 @@ $(document).ready(function() {
             } else {
                 let favs = [];
                 try {
-                    favs = JSON.parse(localStorage.getItem('nerd_favourites') || '[]');
+                    favs = JSON.parse(localStorage.getItem('NeRuaD_favourites') || '[]');
                 } catch(e) {}
 
                 const exists = favs.some(x => x.id === id);
                 if (!exists) {
                     favs.push({ id: id, title: title, img: img });
-                    localStorage.setItem('nerd_favourites', JSON.stringify(favs));
+                    localStorage.setItem('NeRuaD_favourites', JSON.stringify(favs));
                 }
             }
 
@@ -452,7 +452,7 @@ $(document).ready(function() {
             performRealTimeFilter(genre.toLowerCase(), $('.card[data-title]'));
         });
 
-        const searchHistory = JSON.parse(localStorage.getItem('nerd_search_history') || '[]');
+        const searchHistory = JSON.parse(localStorage.getItem('NeRuaD_search_history') || '[]');
 
         $('#searchInput').on('keypress', function(e) {
             if (e.which === 13) {
@@ -462,7 +462,7 @@ $(document).ready(function() {
                     if (searchHistory.length > 10) {
                         searchHistory.pop();
                     }
-                    localStorage.setItem('nerd_search_history', JSON.stringify(searchHistory));
+                    localStorage.setItem('NeRuaD_search_history', JSON.stringify(searchHistory));
                 }
             }
         });
@@ -579,7 +579,7 @@ $('.genre-filter').on('click', function() {
     performRealTimeFilter(genre.toLowerCase(), $('.card[data-title]'));
 });
 
-const searchHistory = JSON.parse(localStorage.getItem('nerd_search_history') || '[]');
+const searchHistory = JSON.parse(localStorage.getItem('NeRuaD_search_history') || '[]');
 
 $('#searchInput').on('keypress', function(e) {
     if (e.which === 13) {
@@ -589,7 +589,7 @@ $('#searchInput').on('keypress', function(e) {
             if (searchHistory.length > 10) {
                 searchHistory.pop();
             }
-            localStorage.setItem('nerd_search_history', JSON.stringify(searchHistory));
+            localStorage.setItem('NeRuaD_search_history', JSON.stringify(searchHistory));
         }
     }
 });
@@ -697,7 +697,7 @@ $card.find('.card-img-top').on('click', function() {
     }
 
     window.currentAudio = new Audio(src);
-    const storedVolume = localStorage.getItem('nerd_volume');
+    const storedVolume = localStorage.getItem('NeRuaD_volume');
     window.currentAudio.volume = storedVolume ? parseFloat(storedVolume) / 100 : 0.7;
 
     window.currentAudio.play();
