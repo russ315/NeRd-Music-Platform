@@ -7,76 +7,52 @@
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="../js/validation.js" defer></script>
+<script src="../js/validation.js" defer></script>
+<script src="../js/api-client.js" defer></script>
+<script src="../js/auth-api.js" defer></script>
 </head>
 <body>
 
-<div class="auth-page-wrapper">
+<div class="auth-shell">
+  <section class="auth-side rgb-glow">
+    <a href="../../index.html" class="back-link">← Back to Home</a>
+    <h1>NeRuaD</h1>
+    <p class="muted">Stream music, watch clips, build your capsule.</p>
+    <div class="auth-side-card">
+      <div class="auth-side-title">Premium Preview</div>
+      <ul>
+        <li>No ads</li>
+        <li>Weekly AI picks</li>
+        <li>Share Capsule</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="auth-main">
     <div class="form-container">
-      <a href="../../index.html" class="back-link">← Back to Home</a>
-      
-      <h2 class="text-center mb-4">Login</h2>
-      <form novalidate >
-         <div class="input-control">
-                <label for="email">Email</label>
-                <input id="email" type="email" placeholder="Email">
-                <div class="error"></div>
-            </div>
+      <h2 class="mb-4">Welcome back</h2>
+      <form novalidate>
         <div class="input-control">
-            <label for="password">Password</label>
-            <input id="password" type="password" placeholder="Password" required>
-            <div class="error"></div>
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="Email">
+          <div class="error"></div>
+        </div>
+        <div class="input-control">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="Password" required>
+          <div class="error"></div>
         </div>
         <button type="submit" class="btn w-100">Sign In</button>
       </form>
-      <div class="form-links text-center mt-3">
+      <div class="form-links mt-3">
         <p>Don't have an account? <a href="register.html">Sign Up</a></p>
       </div>
-      
-      
-      <div class="feature-box mt-4">
-        <h6>Quick Access</h6>
-        <p data-copy="support@NeRuaD-music.com">Contact Support: support@NeRuaD-music.com</p>
-        <div data-copy="https://NeRuaD-music.com/help" class="text-muted">Help Center: https://NeRuaD-music.com/help</div>
+      <div class="auth-inline-help">
+        <span data-copy="support@NeRuaD-music.com">support@NeRuaD-music.com</span>
       </div>
     </div>
+  </section>
 </div>
-
-<footer class="auth-footer">
-  <div class="auth-footer__inner">
-    <div class="auth-footer__brand">
-      <h5>NeRuaD</h5>
-      <div id="datetime-container"></div>
-      <button id="open-popup-btn" class="feature-btn auth-footer__cta">Subscribe to our Newsletter</button>
-    </div>
-    <div class="auth-footer__faq">
-      <div class="accordion-item">
-        <button class="accordion-header">How do I create a playlist?</button>
-        <div class="accordion-content"><p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p></div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-header">Can I use this platform offline?</button>
-        <div class="accordion-content"><p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p></div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-header">How is my data protected?</button>
-        <div class="accordion-content"><p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p></div>
-      </div>
-    </div>
-    <div class="auth-footer__credit">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
-  </div>
-  <div id="popup-overlay" class="auth-footer__overlay">
-    <div class="popup-content">
-      <span id="close-popup-btn">&times;</span>
-      <h3>Subscribe Now</h3>
-      <p>Get the latest music news and updates directly in your inbox.</p>
-      <form>
-        <input type="email" placeholder="Enter your email" required>
-        <button type="submit" class="feature-btn">Subscribe</button>
-      </form>
-    </div>
-  </div>
-</footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/shared-ux.js"></script>

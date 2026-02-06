@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Delete account button
     document.getElementById('deleteAccountBtn').addEventListener('click', confirmDeleteAccount);
-    
+
     // Load settings from localStorage
     loadSettings();
 });
@@ -122,8 +122,8 @@ function loadStatistics() {
         document.getElementById('totalTracks').textContent = '0';
     }
     
-    // Simulated statistics (in real app, these would come from backend)
-    animateCounter('totalPlaylists', Math.ceil(Math.random()*100));
+    var playlistsCount = getPlaylists().length;
+    animateCounter('totalPlaylists', playlistsCount);
     animateCounter('listeningTime', Math.ceil(Math.random()*100), 'h');
     
     calculateAverageRating();
@@ -132,6 +132,11 @@ function loadStatistics() {
 function animateCounter(elementId, target, suffix) {
     suffix = suffix || '';
     var element = document.getElementById(elementId);
+    if (!element) return;
+    if (!target || target <= 0) {
+        element.textContent = '0' + suffix;
+        return;
+    }
     var current = 0;
     var increment = target / 50;
     var timer = setInterval(function() {
@@ -302,6 +307,19 @@ function confirmDeleteAccount() {
         }
     }
 }
+
+function getPlaylists() {
+    try {
+        return JSON.parse(localStorage.getItem('NeRuaD_playlists') || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+function savePlaylists(playlists) {
+    localStorage.setItem('NeRuaD_playlists', JSON.stringify(playlists));
+}
+
 
 function showNotification(title, message, type) {
     // Check if showNotification is available from shared-ux.js

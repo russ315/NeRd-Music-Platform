@@ -159,8 +159,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 var id = btn.getAttribute('data-id');
                 var title = btn.getAttribute('data-title');
                 var img = btn.getAttribute('data-img');
+                var card = btn.closest('.card');
+                var audio = null;
+                var duration = 0;
+                var artist = btn.getAttribute('data-artist') || '';
+                if (card) {
+                    var imgEl = card.querySelector('.card-img-top[data-audio]');
+                    if (imgEl) audio = imgEl.getAttribute('data-audio');
+                    var durationAttr = card.getAttribute('data-duration');
+                    if (durationAttr) duration = parseFloat(durationAttr) || 0;
+                    var artistAttr = card.getAttribute('data-artist');
+                    if (artistAttr) artist = artistAttr;
+                }
                 
-                const success = addToFav({ id: id, title: title, img: img });
+                const success = addToFav({
+                    id: id,
+                    title: title,
+                    img: img,
+                    audio: audio,
+                    duration: duration,
+                    artist: artist
+                });
                 
                 if (success) {
                     btn.textContent = '✓ In Favorites';
@@ -233,48 +252,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
-    function attachAudioHandlers(scope) {
-        var imgsScoped = (scope || document).querySelectorAll('.card-img-top[data-audio]');
-        imgsScoped.forEach(function (img) {
+    function attachAudioHandlers() {
+        if (document._audioDelegationAttached) return;
+        document._audioDelegationAttached = true;
+
+        document.addEventListener('click', function (event) {
+            var img = event.target.closest('img.card-img-top[data-audio]');
+            if (!img) return;
+
             img.style.cursor = 'pointer';
-            img.addEventListener('click', function () {
-                var src = img.getAttribute('data-audio');
-                var card = img.closest('.card');
-                if (window.currentAudio && window.currentAudio.src.includes(src)) {
-                    stopCurrent();
-                    if (card) card.classList.remove('playing');
-                    return;
-                }
+            var src = img.getAttribute('data-audio');
+            var card = img.closest('.card');
+            if (window.currentAudio && window.currentAudio.src.includes(src)) {
                 stopCurrent();
-                window.currentAudio = new Audio(src);
+                if (card) card.classList.remove('playing');
+                return;
+            }
+            stopCurrent();
+            window.currentAudio = new Audio(src);
+            
+            const storedVolume = localStorage.getItem('NeRuaD_volume');
+            if (storedVolume !== null) {
+                window.currentAudio.volume = parseFloat(storedVolume) / 100;
+            } else {
+                window.currentAudio.volume = 0.7;
+            }
+            
+            var playPromise = window.currentAudio.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(function(){});
+            }
+            document.querySelectorAll('.card.playing').forEach(function(c){ c.classList.remove('playing'); });
+            if (card) card.classList.add('playing');
+            window.currentAudio.addEventListener('ended', function(){ 
+                if (card) card.classList.remove('playing');
                 
-                const storedVolume = localStorage.getItem('NeRuaD_volume');
-                if (storedVolume !== null) {
-                    window.currentAudio.volume = parseFloat(storedVolume) / 100;
-                } else {
-                    window.currentAudio.volume = 0.7;
-                }
-                
-                var playPromise = window.currentAudio.play();
-                if (playPromise && typeof playPromise.catch === 'function') {
-                    playPromise.catch(function(){});
-                }
-                document.querySelectorAll('.card.playing').forEach(function(c){ c.classList.remove('playing'); });
-                if (card) card.classList.add('playing');
-                window.currentAudio.addEventListener('ended', function(){ 
-                    if (card) card.classList.remove('playing');
-                    
-                    if (window.playNextTrack) {
-                        window.playNextTrack();
-                    }
-                });
-                
-                if (window.updatePlayerTrackInfo) {
-                    window.updatePlayerTrackInfo(card);
+                if (window.playNextTrack) {
+                    window.playNextTrack();
                 }
             });
+            
+            if (window.updatePlayerTrackInfo) {
+                window.updatePlayerTrackInfo(card);
+            }
         });
     }
+    window.attachAudioHandlers = attachAudioHandlers;
 
     
     function renderMore(items) {
@@ -284,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
             var col = document.createElement('div');
             col.className = 'col';
             col.innerHTML =
-                  '<div class="card h-100 bg-dark border-secondary text-light" data-title="'+item.title+'">'
+                  '<div class="card h-100 bg-dark border-secondary text-light" data-title="'+item.title+'" data-genre="'+(item.genre || 'Various')+'">'
                 + '<img src="'+item.img+'" class="card-img-top" data-audio="'+item.audio+'" alt="'+item.title+'">'
                 + '<div class="card-body d-flex flex-column">'
                 + '<p class="card-text mb-2">'+item.title+'</p>'
@@ -303,6 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
         attachFavoriteHandlers(container);
         attachAudioHandlers(container);
         attachStarRatingHandlers(container);
+        if (window.refreshTrackList) {
+            window.refreshTrackList();
+        }
     }
 
     
@@ -327,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var loaded = false;
         loadBtn.addEventListener('click', function(){
             if (loaded) return;
-            var url = './frontend/src/more-playlists.json?ts=' + Date.now();
+            var url = '/api/more-playlists?ts=' + Date.now();
             fetch(url, { cache: 'no-store' })
                 .then(function(r){ if(!r.ok) throw new Error('status '+r.status); return r.json(); })
                 .then(function(items){
@@ -335,11 +361,70 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderMore(items);
                     loaded = true;
                     loadBtn.disabled = true;
+                    applyGenreFilter();
                 })
                 .catch(function(err){
                     alert('Не удалось загрузить данные. Открой через локальный сервер или GitHub Pages.');
                     console.log('Load failed', err);
                 });
+        });
+    }
+
+    var activeGenre = null;
+    function applyGenreFilter() {
+        var cards = document.querySelectorAll('.card[data-title][data-genre]');
+        if (!activeGenre) {
+            cards.forEach(function(card){ card.style.display = ''; });
+            return;
+        }
+        cards.forEach(function(card){
+            var g = (card.getAttribute('data-genre') || '').toLowerCase();
+            if (g === activeGenre) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    document.querySelectorAll('.genre-filter').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            var genre = (btn.getAttribute('data-genre') || '').toLowerCase();
+            if (activeGenre === genre) {
+                activeGenre = null;
+                document.querySelectorAll('.genre-filter').forEach(function(b){ b.classList.remove('active'); });
+            } else {
+                activeGenre = genre;
+                document.querySelectorAll('.genre-filter').forEach(function(b){ b.classList.remove('active'); });
+                btn.classList.add('active');
+            }
+            applyGenreFilter();
+        });
+    });
+
+    var aiMixBtn = document.getElementById('startAiMixBtn');
+    if (aiMixBtn) {
+        aiMixBtn.addEventListener('click', function(){
+            var playable = Array.from(document.querySelectorAll('.card-img-top[data-audio]'));
+            if (!playable.length) {
+                if (window.showNotification) {
+                    showNotification('AI Mix', 'No tracks found to play', 'warning', 2000);
+                }
+                return;
+            }
+            var pick = playable[Math.floor(Math.random() * playable.length)];
+            pick.click();
+            pick.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (window.showNotification) {
+                showNotification('AI Mix', 'Started a fresh mix for you', 'success', 2000);
+            }
+        });
+    }
+
+    var createPlaylistBtn = document.getElementById('createPlaylistBtn');
+    if (createPlaylistBtn) {
+        createPlaylistBtn.addEventListener('click', function(){
+            window.location.href = 'frontend/html/playlists.html?create=1';
         });
     }
 
@@ -428,7 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const artistInfo = track.artist ? `<small class="text-muted d-block">by ${track.artist}</small>` : '';
             
             col.innerHTML =
-                '<div class="card h-100 bg-dark border-secondary text-light api-track-card" data-title="'+track.title+'">'
+                '<div class="card h-100 bg-dark border-secondary text-light api-track-card" data-title="'+track.title+'" data-duration="'+(track.duration || 0)+'" data-artist="'+(track.artist || '')+'">'
                 + '<div class="position-relative">'
                 + '<img src="'+track.img+'" class="card-img-top" '+(previewAudio ? 'data-audio="'+previewAudio+'"' : '')+' alt="'+track.title+'" loading="lazy">'
                 + '<span class="badge bg-info position-absolute top-0 end-0 m-2">API</span>'
@@ -443,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 + '<span class="star" data-value="4">★</span>'
                 + '<span class="star" data-value="5">★</span>'
                 + '</div>'
-                + '<button class="btn btn-warning mt-auto add-fav" data-id="'+track.id+'" data-title="'+track.title+'" data-img="'+track.img+'">Add to Favourites</button>'
+                + '<button class="btn btn-warning mt-auto add-fav" data-id="'+track.id+'" data-title="'+track.title+'" data-img="'+track.img+'" data-artist="'+(track.artist || '')+'">Add to Favourites</button>'
                 + '</div></div>';
             
             container.appendChild(col);

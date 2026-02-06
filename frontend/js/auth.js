@@ -19,6 +19,7 @@
         if (confirmed) {
             localStorage.removeItem('NeRuaD_auth');
             localStorage.removeItem('NeRuaD_user');
+            localStorage.removeItem('NeRuaD_token');
             
             if (window.showNotification) {
                 showNotification('Logged Out', 'You have been logged out successfully', 'info', 2000);

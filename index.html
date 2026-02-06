@@ -1,305 +1,359 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeRuaD - Your Favorite Music Platform</title>
+    <title>NeRuaD - Music Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="frontend/css/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        (function() {
-            const storedTheme = localStorage.getItem('NeRuaD_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', storedTheme);
-        })();
-    </script>
 </head>
 <body class="text-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">NeRuaD</a>
-            
-            <form class="search-form position-absolute start-50 translate-middle-x">
-                <div class="input-group search-container" style="max-width: 400px; position: relative;">
-                    <input id="searchInput" type="text" class="form-control bg-dark text-light border-secondary" placeholder="Search music" autocomplete="off">
-                    <button id="searchBtn" class="btn btn-success" type="button">🔎</button>
-                    <div id="searchSuggestions" class="search-suggestions"></div>
-                </div>
-            </form>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="index.html" data-i18n="home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="frontend/html/favourite.html" data-i18n="favourites">Favourites</a></li>
-                    <li class="nav-item"><a class="nav-link" href="frontend/html/profile.html" data-i18n="profile">Profile</a></li>
-                </ul>
-                
-                <div class="btn-group">
-                    <a class="btn btn-outline-secondary text-light" href="frontend/html/login.html" data-i18n="login">Login</a>
-                    <a class="btn btn-warning" href="frontend/html/register.html" data-i18n="signup">Sign Up</a>
-                </div>
-                <div class="navbar-actions ms-auto ms-lg-2 d-flex gap-2">
-                    <button id="themeToggle" class="btn btn-sm btn-outline-light" title="Toggle theme">🌓</button>
-                    <button id="langToggle" class="btn btn-sm btn-outline-light" data-i18n="lang_toggle">RU</button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="music-background"></div>
-    <div class="content" style="min-height: calc(100vh - 200px);">
-        <div class="welcome-box">
-            <h2 data-i18n="welcome_title">Welcome to NeRuaD!</h2>
-            <p data-i18n="welcome_sub">Your place for music</p>
-        </div>
-        <section class="music-icons">
-            <h3 data-i18n="section_title">New Popular Music For You!</h3>
-            <p class="music-note" data-i18n="section_sub">Suggestions just for you based on your preferences.</p>
-            
-            
-            <div class="genre-filters mb-3">
-                <span class="text-light me-2">Filter by genre:</span>
-                <button class="genre-filter" data-genre="Pop">Pop</button>
-                <button class="genre-filter" data-genre="Rock">Rock</button>
-                <button class="genre-filter" data-genre="Electronic">Electronic</button>
-                <button class="genre-filter" data-genre="Jazz">Jazz</button>
-                <button class="genre-filter" data-genre="Hip Hop">Hip Hop</button>
-                <button class="genre-filter" data-genre="Classical">Classical</button>
-                <button class="genre-filter" data-genre="Chill">Chill</button>
-                <button class="genre-filter" data-genre="Indie">Indie</button>
-                <button class="genre-filter" data-genre="Lo-Fi">Lo-Fi</button>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand rgb-glow">
+                <span class="brand-mark">NeRuaD</span>
+                <small class="muted">Music & Clips</small>
             </div>
 
-            
-            <div id="searchResultsContainer" class="container my-3" style="display: none;">
-                <h4 class="mb-4">Search Results</h4>
-                <div id="searchResults" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"></div>
+            <nav class="sidebar-nav">
+                <a class="nav-link active" href="index.html" data-i18n="home">Home</a>
+                <a class="nav-link" href="frontend/html/favourite.html" data-i18n="favourites">Favourites</a>
+                <a class="nav-link" href="frontend/html/profile.html" data-i18n="profile">Profile</a>
+            </nav>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Actions</div>
+                <button class="sidebar-pill">AI Mix</button>
+                <button class="sidebar-pill">Share Capsule</button>
+                <button class="sidebar-pill">Video Clips</button>
             </div>
 
-            
-            <div id="carouselContainer" class="container my-3">
-                <div id="playlistCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 1">
-                                        <img src="frontend/src/img/track1.jpeg" data-audio="frontend/src/music/track1.mp3" class="card-img-top" alt="Daily mix cover one">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Daily Mix 1</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
+            <div class="sidebar-footer">
+                <span class="badge-soft">Premium</span>
+                <div class="muted mt-2">No ads • Weekly picks</div>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+            <header class="topbar">
+                <form class="search-form">
+                    <div class="input-group search-container">
+                        <input id="searchInput" type="text" class="form-control" placeholder="Search music" autocomplete="off">
+                        <button id="searchBtn" class="btn btn-primary" type="button">🔎</button>
+                        <div id="searchSuggestions" class="search-suggestions"></div>
+                    </div>
+                </form>
+
+                <div class="topbar-actions">
+                    <div class="btn-group">
+                        <a class="btn btn-outline-secondary text-light" href="frontend/html/login.html" data-i18n="login">Login</a>
+                        <a class="btn btn-warning" href="frontend/html/register.html" data-i18n="signup">Sign Up</a>
+                    </div>
+                    <div class="navbar-actions">
+                        <button id="themeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle theme">🌓</button>
+                        <button id="langToggle" class="btn btn-sm btn-outline-secondary" data-i18n="lang_toggle">RU</button>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <section class="hero-panel section-surface rgb-glow">
+                    <div>
+                        <h2 data-i18n="welcome_title">Welcome to NeRuaD!</h2>
+                        <p class="section-subtitle" data-i18n="welcome_sub">Your place for music</p>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" id="startAiMixBtn">Start AI Mix</button>
+                        <button class="btn btn-secondary" id="createPlaylistBtn">Create Playlist</button>
+                    </div>
+                </section>
+
+                <section class="section-surface content-panel">
+                    <div class="section-header">
+                        <div>
+                            <h3 class="section-title" data-i18n="section_title">New Popular Music For You!</h3>
+                            <p class="section-subtitle" data-i18n="section_sub">Suggestions just for you based on your preferences.</p>
+                        </div>
+                        <span class="badge-soft">AI Picks</span>
+                    </div>
+
+                    <div class="genre-filters mb-3">
+                        <span class="text-light me-2">Filter by genre:</span>
+                        <button class="genre-filter" data-genre="Pop">Pop</button>
+                        <button class="genre-filter" data-genre="Rock">Rock</button>
+                        <button class="genre-filter" data-genre="Electronic">Electronic</button>
+                        <button class="genre-filter" data-genre="Jazz">Jazz</button>
+                        <button class="genre-filter" data-genre="Hip Hop">Hip Hop</button>
+                        <button class="genre-filter" data-genre="Classical">Classical</button>
+                        <button class="genre-filter" data-genre="Chill">Chill</button>
+                        <button class="genre-filter" data-genre="Indie">Indie</button>
+                        <button class="genre-filter" data-genre="Lo-Fi">Lo-Fi</button>
+                    </div>
+
+                    <div id="searchResultsContainer" class="container my-3" style="display: none;">
+                        <h4 class="mb-4">Search Results</h4>
+                        <div id="searchResults" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"></div>
+                    </div>
+
+                    <div id="carouselContainer" class="container my-3">
+                        <div id="playlistCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 1" data-genre="Pop">
+                                                <img src="frontend/src/img/track1.jpeg" data-audio="frontend/src/music/track1.mp3" class="card-img-top" alt="Daily mix cover one">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Daily Mix 1</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="mix1" data-title="Daily Mix 1" data-img="frontend/src/img/track1.jpeg">Add to Favourites</button>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="mix1" data-title="Daily Mix 1" data-img="frontend/src/img/track1.jpeg">Add to Favourites</button>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 2" data-genre="Rock">
+                                                <img src="frontend/src/img/track2.jpg" data-audio="frontend/src/music/track2.mp3" class="card-img-top" alt="Daily mix cover two">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Daily Mix 2</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="mix2" data-title="Daily Mix 2" data-img="frontend/src/img/track2.jpg">Add to Favourites</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 3" data-genre="Electronic">
+                                                <img src="frontend/src/img/track3.jpg" data-audio="frontend/src/music/track3.mp3" class="card-img-top" alt="Daily mix cover three">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Daily Mix 3</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="mix3" data-title="Daily Mix 3" data-img="frontend/src/img/track3.jpg">Add to Favourites</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 2">
-                                        <img src="frontend/src/img/track2.jpg" data-audio="frontend/src/music/track2.mp3" class="card-img-top" alt="Daily mix cover two">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Daily Mix 2</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
+                                <div class="carousel-item">
+                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Chill Vibes" data-genre="Chill">
+                                                <img src="frontend/src/img/track4.jpg" data-audio="frontend/src/music/track4.mp3" class="card-img-top" alt="Chill vibes cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Chill Vibes</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="chill1" data-title="Chill Vibes" data-img="frontend/src/img/track4.jpg">Add to Favourites</button>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="mix2" data-title="Daily Mix 2" data-img="frontend/src/img/track2.jpg">Add to Favourites</button>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Rock Anthems" data-genre="Rock">
+                                                <img src="frontend/src/img/track5.jpg" data-audio="frontend/src/music/track5.mp3" class="card-img-top" alt="Rock anthems cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Rock Anthems</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="rock1" data-title="Rock Anthems" data-img="frontend/src/img/track5.jpg">Add to Favourites</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Electronic Dreams" data-genre="Electronic">
+                                                <img src="frontend/src/img/track6.png" data-audio="frontend/src/music/track6.mp3" class="card-img-top" alt="Electronic dreams cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Electronic Dreams</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="electronic1" data-title="Electronic Dreams" data-img="frontend/src/img/track6.png">Add to Favourites</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Daily Mix 3">
-                                        <img src="frontend/src/img/track3.jpg" data-audio="frontend/src/music/track3.mp3" class="card-img-top" alt="Daily mix cover three">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Daily Mix 3</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
+                                <div class="carousel-item">
+                                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Jazz Lounge" data-genre="Jazz">
+                                                <img src="frontend/src/img/jazz.jpg" data-audio="frontend/src/music/jazz.mp3" class="card-img-top" alt="Jazz lounge cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Jazz Lounge</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="jazz1" data-title="Jazz Lounge" data-img="frontend/src/img/jazz.jpg">Add to Favourites</button>
+                                                </div>
                                             </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="mix3" data-title="Daily Mix 3" data-img="frontend/src/img/track3.jpg">Add to Favourites</button>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Hip Hop Flow" data-genre="Hip Hop">
+                                                <img src="frontend/src/img/hiphop.jpg" data-audio="frontend/src/music/hiphop.mp3" class="card-img-top" alt="Hip hop flow cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Hip Hop Flow</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="hiphop1" data-title="Hip Hop Flow" data-img="frontend/src/img/hiphop.jpg">Add to Favourites</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100 bg-dark border-secondary text-light" data-title="Classical Symphony" data-genre="Classical">
+                                                <img src="frontend/src/img/classical.jpg" data-audio="frontend/src/music/classical.mp3" class="card-img-top" alt="Classical symphony cover">
+                                                <div class="card-body d-flex flex-column">
+                                                    <p class="card-text mb-2">Classical Symphony</p>
+                                                    <div class="rating mb-3" data-rating="0">
+                                                        <span class="star" data-value="1">★</span>
+                                                        <span class="star" data-value="2">★</span>
+                                                        <span class="star" data-value="3">★</span>
+                                                        <span class="star" data-value="4">★</span>
+                                                        <span class="star" data-value="5">★</span>
+                                                    </div>
+                                                    <button class="btn btn-warning mt-auto add-fav" data-id="classical1" data-title="Classical Symphony" data-img="frontend/src/img/classical.jpg">Add to Favourites</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#playlistCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#playlistCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
-                        <div class="carousel-item">
-                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Chill Vibes">
-                                        <img src="frontend/src/img/track4.jpg" data-audio="frontend/src/music/track4.mp3" class="card-img-top" alt="Chill vibes cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Chill Vibes</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="chill1" data-title="Chill Vibes" data-img="frontend/src/img/track4.jpg">Add to Favourites</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Rock Anthems">
-                                        <img src="frontend/src/img/track5.jpg" data-audio="frontend/src/music/track5.mp3" class="card-img-top" alt="Rock anthems cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Rock Anthems</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="rock1" data-title="Rock Anthems" data-img="frontend/src/img/track5.jpg">Add to Favourites</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Electronic Dreams">
-                                        <img src="frontend/src/img/track6.png" data-audio="frontend/src/music/track6.mp3" class="card-img-top" alt="Electronic dreams cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Electronic Dreams</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="electronic1" data-title="Electronic Dreams" data-img="frontend/src/img/track6.png">Add to Favourites</button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="text-center mt-3">
+                            <button id="loadMore" class="btn btn-secondary" data-i18n="load_more">Load more</button>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div id="moreContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-2"></div>
+                    </div>
+                </section>
+
+                <section class="section-surface content-panel">
+                    <div class="section-header">
+                        <div>
+                            <h3 class="section-title">Video Clips</h3>
+                            <p class="section-subtitle">Watch official clips and live sessions.</p>
+                        </div>
+                        <span class="badge-soft">Clips</span>
+                    </div>
+                    <div class="clips-grid">
+                        <div class="clip-card rgb-glow">
+                            <img src="frontend/src/img/track7.jpg" alt="Clip cover">
+                            <div class="clip-info">
+                                <h5>NeRuaD Sessions</h5>
+                                <p class="muted">Live • 3:42</p>
+                                <button class="btn btn-secondary btn-sm">Watch</button>
                             </div>
                         </div>
-                        <div class="carousel-item">
-                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Jazz Lounge">
-                                        <img src="frontend/src/img/jazz.jpg" data-audio="frontend/src/music/jazz.mp3" class="card-img-top" alt="Jazz lounge cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Jazz Lounge</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="jazz1" data-title="Jazz Lounge" data-img="frontend/src/img/jazz.jpg">Add to Favourites</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Hip Hop Flow">
-                                        <img src="frontend/src/img/hiphop.jpg" data-audio="frontend/src/music/hiphop.mp3" class="card-img-top" alt="Hip hop flow cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Hip Hop Flow</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="hiphop1" data-title="Hip Hop Flow" data-img="frontend/src/img/hiphop.jpg">Add to Favourites</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card h-100 bg-dark border-secondary text-light" data-title="Classical Symphony">
-                                        <img src="frontend/src/img/classical.jpg" data-audio="frontend/src/music/classical.mp3" class="card-img-top" alt="Classical symphony cover">
-                                        <div class="card-body d-flex flex-column">
-                                            <p class="card-text mb-2">Classical Symphony</p>
-                                            <div class="rating mb-3" data-rating="0">
-                                                <span class="star" data-value="1">★</span>
-                                                <span class="star" data-value="2">★</span>
-                                                <span class="star" data-value="3">★</span>
-                                                <span class="star" data-value="4">★</span>
-                                                <span class="star" data-value="5">★</span>
-                                            </div>
-                                            <button class="btn btn-warning mt-auto add-fav" data-id="classical1" data-title="Classical Symphony" data-img="frontend/src/img/classical.jpg">Add to Favourites</button>
-                                        </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#playlistCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#playlistCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <div class="text-center mt-3">
-                    <button id="loadMore" class="btn btn-secondary" data-i18n="load_more">Load more</button>
-                </div>
-            </div>
-            <div class="container">
-                <div id="moreContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-2"></div>
-            </div>
-        </section>
-        
-        
-        <section class="stats-section">
-            <div class="container">
-                <h3 class="text-center mb-5" style="color: var(--accent);">Our Music Platform Statistics</h3>
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <div class="animated-counter" data-target="1250">0</div>
-                        <div class="stat-label">Active Users</div>
-                        <div class="stat-description">Music lovers worldwide</div>
+                        <div class="clip-card">
+                            <img src="frontend/src/img/track8.png" alt="Clip cover">
+                            <div class="clip-info">
+                                <h5>Indie Spotlight</h5>
+                                <p class="muted">Official • 4:05</p>
+                                <button class="btn btn-secondary btn-sm">Watch</button>
+                            </div>
+                        </div>
+                        <div class="clip-card">
+                            <img src="frontend/src/img/track9.jpeg" alt="Clip cover">
+                            <div class="clip-info">
+                                <h5>Late Night Beats</h5>
+                                <p class="muted">Live • 2:58</p>
+                                <button class="btn btn-secondary btn-sm">Watch</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="animated-counter" data-target="50000">0</div>
-                        <div class="stat-label">Songs Available</div>
-                        <div class="stat-description">From all genres</div>
+                </section>
+
+                <section class="section-surface content-panel">
+                    <div class="section-header">
+                        <div>
+                            <h3 class="section-title">Premium + Share Capsule</h3>
+                            <p class="section-subtitle">Exclusive benefits and fast sharing.</p>
+                        </div>
+                        <span class="badge-soft">Core Features</span>
                     </div>
-                    <div class="stat-item">
-                        <div class="animated-counter" data-target="2500">0</div>
-                        <div class="stat-label">Playlists Created</div>
-                        <div class="stat-description">By our community</div>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h5>Favourites Hub</h5>
+                            <p class="muted">All your liked tracks in one clean place.</p>
+                            <a class="btn btn-secondary btn-sm" href="frontend/html/favourite.html">Open favourites</a>
+                        </div>
+                        <div class="feature-card rgb-glow">
+                            <h5>Premium Subscription</h5>
+                            <p class="muted">No ads, infinite AI stream, weekly recaps.</p>
+                            <button class="btn btn-primary btn-sm">Upgrade</button>
+                        </div>
+                        <div class="feature-card">
+                            <h5>Share Capsule</h5>
+                            <p class="muted">Create a short playlist with a share code.</p>
+                            <button class="btn btn-secondary btn-sm">Create capsule</button>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="animated-counter" data-target="99">0</div>
-                        <div class="stat-label">Uptime %</div>
-                        <div class="stat-description">Reliable service</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                </section>
+            </main>
+
+            <footer class="app-footer">
+                <div>NeRuaD • Music platform for study</div>
+                <div class="muted">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
+            </footer>
+        </div>
     </div>
 
-    
-    <div id="musicPlayer" class="music-player">
+    <div class="player-bar bg-dark text-light border-top border-secondary fixed-bottom">
         <div class="player-container">
-            
             <div class="player-track-info">
-                <img id="playerAlbumArt" src="" alt="Album Art" class="player-album-art" style="display: none;">
+                <img id="playerAlbumArt" class="player-album-art" src="" alt="Album Art" style="display: none;">
                 <div class="player-track-details">
                     <div id="playerTrackTitle" class="player-track-title">No track selected</div>
                     <div id="playerTrackArtist" class="player-track-artist">—</div>
                 </div>
             </div>
 
-            
             <div class="player-controls">
                 <div class="player-buttons">
                     <button id="prevTrack" class="player-btn" title="Previous track">⏮</button>
@@ -316,7 +370,6 @@
                 </div>
             </div>
 
-            
             <div class="player-volume">
                 <button id="muteBtn" class="player-btn player-btn-small" title="Mute/Unmute">🔊</button>
                 <div class="player-volume-bar">
@@ -327,50 +380,10 @@
         </div>
     </div>
 
-    <footer class="bg-dark text-light border-top border-secondary mt-auto">
-        <div class="container py-4">
-            <div class="row g-3">
-                <div class="col-12 col-md-4">
-                    <h5>NeRuaD</h5>
-                    <div id="datetime-container"></div>
-                    <div class="feature-box">
-                        <button id="open-popup-btn" class="feature-btn">Subscribe to our Newsletter</button>
-                    </div>
-        
-                </div>
-                <div class="col-12 col-md-8">
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">How do I create a playlist?</button>
-                        <div class="accordion-content"><p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">Can I use this platform offline?</button>
-                        <div class="accordion-content"><p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">How is my data protected?</button>
-                        <div class="accordion-content"><p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="popup-overlay">
-                <div class="popup-content">
-                    <span id="close-popup-btn">&times;</span>
-                    <h3>Subscribe Now</h3>
-                    <p>Get the latest music news and updates directly in your inbox.</p>
-                    <form>
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit" class="feature-btn">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-            <div class="pt-3">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
-        </div>
-    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="frontend/js/auth.js"></script>
+    <script src="frontend/js/api-client.js"></script>
     <script src="frontend/js/favorites-manager.js"></script>
     <script src="frontend/js/api-service.js"></script>
     <script src="frontend/js/shared-ux.js"></script>

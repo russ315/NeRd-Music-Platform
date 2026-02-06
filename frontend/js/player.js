@@ -55,6 +55,7 @@
             };
         }).filter(track => track.audio);
     }
+    window.refreshTrackList = updateTrackList;
 
 
     function formatTime(seconds) {

@@ -13,6 +13,10 @@
         }
     }
 
+    function getToken() {
+        return localStorage.getItem('NeRuaD_token');
+    }
+
     function getUserFavoritesKey() {
         const user = getCurrentUser();
         if (!user) return null;
@@ -42,6 +46,62 @@
         }
     }
 
+    async function pushFavoritesToApi(list) {
+        for (const fav of list) {
+            const payload = {
+                externalId: fav.externalId || fav.id,
+                title: fav.title,
+                artist: fav.artist || 'Various Artists',
+                album: fav.album || '',
+                img: fav.img || '',
+                previewUrl: fav.audio || '',
+                duration: fav.duration || 0,
+                genre: fav.genre || '',
+                source: fav.source || 'local',
+                externalUrl: fav.externalUrl || ''
+            };
+            try {
+                const track = await ApiClient.request('/tracks', {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                await ApiClient.request('/favorites', {
+                    method: 'POST',
+                    body: JSON.stringify({ trackId: track._id || track.id })
+                });
+            } catch (e) {
+                console.warn('Failed to push favorite to API', e.message);
+            }
+        }
+    }
+
+    async function syncFavoritesFromApi() {
+        if (!getToken() || typeof ApiClient === 'undefined') return;
+        try {
+            const localBefore = readUserFavorites();
+            const data = await ApiClient.request('/favorites', { method: 'GET' });
+            if (!data.length && localBefore.length) {
+                await pushFavoritesToApi(localBefore);
+                return;
+            }
+            const mapped = data.map(function(item) {
+                const track = item.trackId || {};
+                return {
+                    id: track._id || item.trackId,
+                    externalId: track.externalId,
+                    title: track.title,
+                    img: track.img || '',
+                    audio: track.previewUrl || '',
+                    duration: track.duration || 0,
+                    source: track.source || 'local'
+                };
+            });
+            writeUserFavorites(mapped);
+        } catch (e) {
+            console.warn('Failed to sync favorites from API', e.message);
+        }
+    }
+
     function writeUserFavorites(favorites) {
         if (!isUserLoggedIn()) {
             return false;
@@ -59,6 +119,10 @@
         }
     }
 
+    function matchesFavorite(fav, itemId) {
+        return fav.id === itemId || fav.externalId === itemId;
+    }
+
     function addToUserFavorites(item) {
         if (!isUserLoggedIn()) {
             alert('Please login to add favorites');
@@ -71,11 +135,54 @@
         }
 
         const favorites = readUserFavorites();
-        const exists = favorites.some(fav => fav.id === item.id);
+        const exists = favorites.some(fav => matchesFavorite(fav, item.id));
         
         if (!exists) {
-            favorites.push(item);
-            return writeUserFavorites(favorites);
+            const storedItem = {
+                ...item,
+                externalId: item.externalId || item.id
+            };
+            favorites.push(storedItem);
+            writeUserFavorites(favorites);
+
+            if (getToken() && typeof ApiClient !== 'undefined') {
+                (async function() {
+                    try {
+                        const payload = {
+                            externalId: storedItem.externalId,
+                            title: storedItem.title,
+                            artist: storedItem.artist || 'Various Artists',
+                            album: storedItem.album || '',
+                            img: storedItem.img || '',
+                            previewUrl: storedItem.audio || '',
+                            duration: storedItem.duration || 0,
+                            genre: storedItem.genre || '',
+                            source: storedItem.source || 'local',
+                            externalUrl: storedItem.externalUrl || ''
+                        };
+                        const track = await ApiClient.request('/tracks', {
+                            method: 'POST',
+                            body: JSON.stringify(payload)
+                        });
+                        await ApiClient.request('/favorites', {
+                            method: 'POST',
+                            body: JSON.stringify({ trackId: track._id || track.id })
+                        });
+
+                        const refreshed = readUserFavorites().map(function(fav) {
+                            if (fav.externalId === storedItem.externalId) {
+                                return { ...fav, id: track._id || track.id };
+                            }
+                            return fav;
+                        });
+                        writeUserFavorites(refreshed);
+                    } catch (e) {
+                        console.warn('Failed to sync favorite to API', e.message);
+                    }
+                })();
+            }
+
+            return true;
         }
         
         return false;
@@ -87,10 +194,23 @@
         }
 
         const favorites = readUserFavorites();
-        const filtered = favorites.filter(fav => fav.id !== itemId);
+        const target = favorites.find(fav => matchesFavorite(fav, itemId));
+        const filtered = favorites.filter(fav => !matchesFavorite(fav, itemId));
         
         if (filtered.length !== favorites.length) {
-            return writeUserFavorites(filtered);
+            writeUserFavorites(filtered);
+
+            if (getToken() && typeof ApiClient !== 'undefined' && target && target.id) {
+                (async function() {
+                    try {
+                        await ApiClient.request(`/favorites/${target.id}`, { method: 'DELETE' });
+                    } catch (e) {
+                        console.warn('Failed to remove favorite from API', e.message);
+                    }
+                })();
+            }
+
+            return true;
         }
         
         return false;
@@ -102,7 +222,7 @@
         }
 
         const favorites = readUserFavorites();
-        return favorites.some(fav => fav.id === itemId);
+        return favorites.some(fav => matchesFavorite(fav, itemId));
     }
 
     function getUserFavoritesCount() {
@@ -146,6 +266,7 @@
     function init() {
         if (isUserLoggedIn()) {
             migrateOldFavorites();
+            syncFavoritesFromApi();
         }
     }
 

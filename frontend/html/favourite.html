@@ -3,102 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NeRuaD - Your Favorite Music Platform</title>
+    <title>NeRuaD - Favourite Tracks</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/favourite.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    
 </head>
 <body class="text-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../../index.html">NeRuaD</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#favNav" aria-controls="favNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="favNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="../../index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="favourite.html">Favourites</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
-                </ul>
-                
-                <div class="btn-group">
-                    <a class="btn btn-outline-secondary text-light" href="login.html">Login</a>
-                    <a class="btn btn-warning" href="register.html">Sign Up</a>
-                </div>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-brand rgb-glow">
+                <span class="brand-mark">NeRuaD</span>
+                <small class="muted">Favourites</small>
             </div>
-        </div>
-    </nav>
+            <nav class="sidebar-nav">
+                <a class="nav-link" href="../../index.html">Home</a>
+                <a class="nav-link active" href="favourite.html">Favourites</a>
+                <a class="nav-link" href="profile.html">Profile</a>
+            </nav>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Actions</div>
+                <button class="sidebar-pill">Play All</button>
+                <button class="sidebar-pill">Share Capsule</button>
+            </div>
+            <div class="sidebar-footer">
+                <span class="badge-soft">Saved tracks</span>
+            </div>
+        </aside>
 
-    <div class="content" style="min-height: calc(100vh - 200px); padding-bottom: 90px;">
-        <div class="container" style="max-width: 920px;">
-            <h2 class="mb-3">My Favourite Tracks</h2>
-            
-            
-            
-            <div id="favouritesGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+        <div class="main-panel">
+            <header class="topbar">
+                <h3 class="section-title mb-0">My Favourite Tracks</h3>
+                <div class="topbar-actions">
+                    <div class="btn-group">
+                        <a class="btn btn-outline-secondary text-light" href="login.html">Login</a>
+                        <a class="btn btn-warning" href="register.html">Sign Up</a>
+                    </div>
+                    <button id="themeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle theme">🌓</button>
+                </div>
+            </header>
+
+            <main>
+                <div class="container" style="max-width: 1100px;">
+                    <div class="playlist-block">
+                        <div class="playlist-block-header">
+                            <h4 class="mb-0">Your Playlists</h4>
+                            <button class="btn btn-secondary btn-sm" id="createPlaylistFromFav">Create playlist</button>
+                        </div>
+                        <div id="playlistListInline" class="playlist-list-inline"></div>
+                    </div>
+
+                    <div id="favouritesList" class="track-list"></div>
+                </div>
+            </main>
+
+            <footer class="app-footer">
+                <div>NeRuaD</div>
+                <div class="muted">Your saved tracks</div>
+            </footer>
         </div>
     </div>
-    <footer class="bg-dark text-light border-top border-secondary mt-auto">
-        <div class="container py-4">
-            <div class="row g-3">
-                <div class="col-12 col-md-4">
-                    <h5>NeRuaD</h5>
-                    <div id="datetime-container"></div>
-                    <div class="feature-box">
-                        <button id="open-popup-btn" class="feature-btn">Subscribe to our Newsletter</button>
-                    </div>
-        
-                    <div class="feature-box">
-                        <button id="change-bg-btn" class="feature-btn">Change Background Color</button>
-                    </div>
-                </div>
-                <div class="col-12 col-md-8">
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">How do I create a playlist?</button>
-                        <div class="accordion-content"><p>To create a playlist, navigate to the 'My Playlists' section and click the 'New Playlist' button. You can then add tracks by searching for them and clicking the 'Add to Playlist' icon.</p></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">Can I use this platform offline?</button>
-                        <div class="accordion-content"><p>Offline listening is a premium feature. Subscribers can download their favorite tracks and playlists to listen without an internet connection.</p></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button class="accordion-header w-100">How is my data protected?</button>
-                        <div class="accordion-content"><p>We take your privacy seriously. All user data is encrypted and stored securely. We do not share your personal information with third parties without your consent. For more details, please review our Privacy Policy.</p></div>
-                    </div>
+
+    <div class="player-bar bg-dark text-light border-top border-secondary fixed-bottom">
+        <div class="player-container">
+            <div class="player-track-info">
+                <img id="playerAlbumArt" class="player-album-art" src="" alt="Album Art" style="display: none;">
+                <div class="player-track-details">
+                    <div id="playerTrackTitle" class="player-track-title">No track selected</div>
+                    <div id="playerTrackArtist" class="player-track-artist">—</div>
                 </div>
             </div>
 
-            <div id="popup-overlay">
-                <div class="popup-content">
-                    <span id="close-popup-btn">&times;</span>
-                    <h3>Subscribe Now</h3>
-                    <p>Get the latest music news and updates directly in your inbox.</p>
-                    <form>
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit" class="feature-btn">Subscribe</button>
-                    </form>
+            <div class="player-controls">
+                <div class="player-buttons">
+                    <button id="prevTrack" class="player-btn" title="Previous track">⏮</button>
+                    <button id="playPause" class="player-btn player-btn-main" title="Play/Pause">▶</button>
+                    <button id="nextTrack" class="player-btn" title="Next track">⏭</button>
+                </div>
+                <div class="player-progress-container">
+                    <span id="currentTime" class="player-time">0:00</span>
+                    <div class="player-progress-bar">
+                        <div id="progressBar" class="player-progress-fill"></div>
+                        <input type="range" id="progressSlider" class="player-progress-slider" min="0" max="100" value="0">
+                    </div>
+                    <span id="totalTime" class="player-time">0:00</span>
                 </div>
             </div>
-            <div class="pt-3">Ruslan Bolatbekuly, Nurkhan Orazbay</div>
+
+            <div class="player-volume">
+                <button id="muteBtn" class="player-btn player-btn-small" title="Mute/Unmute">🔊</button>
+                <div class="player-volume-bar">
+                    <div id="volumeFill" class="player-volume-fill"></div>
+                    <input type="range" id="volumeSlider" class="player-volume-slider" min="0" max="100" value="70">
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/auth.js"></script>
+    <script src="../js/api-client.js"></script>
     <script src="../js/favorites-manager.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/shared-ux.js"></script>
+    <script src="../js/player.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Check if user is logged in
+        var audioMap = {
+            mix1: '../src/music/track1.mp3',
+            mix2: '../src/music/track2.mp3',
+            mix3: '../src/music/track3.mp3',
+            chill1: '../src/music/track4.mp3',
+            rock1: '../src/music/track5.mp3',
+            electronic1: '../src/music/track6.mp3',
+            jazz1: '../src/music/jazz.mp3',
+            hiphop1: '../src/music/hiphop.mp3',
+            classical1: '../src/music/classical.mp3',
+            indie1: '../src/music/indie.mp3',
+            lofi1: '../src/music/lofi.mp3'
+        };
+
+        function normalizeAudioPath(path) {
+            if (!path) return null;
+            if (path.startsWith('frontend/')) {
+                return '../' + path.replace(/^frontend\//, '');
+            }
+            if (path.startsWith('/frontend/')) {
+                return '..' + path.replace(/^\/frontend/, '');
+            }
+            return path;
+        }
+
+        function resolveAudio(item) {
+            if (item.audio) return normalizeAudioPath(item.audio);
+            return audioMap[item.id] || null;
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds || isNaN(seconds)) return '—';
+            var m = Math.floor(seconds / 60);
+            var s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function applyDuration(audioSrc, durationEl, fallbackSeconds) {
+            if (fallbackSeconds && fallbackSeconds > 0) {
+                durationEl.textContent = formatDuration(fallbackSeconds);
+                return;
+            }
+            if (!audioSrc) {
+                durationEl.textContent = '—';
+                return;
+            }
+            try {
+                var audio = new Audio();
+                audio.preload = 'metadata';
+                audio.src = audioSrc;
+                audio.addEventListener('loadedmetadata', function() {
+                    durationEl.textContent = formatDuration(audio.duration);
+                });
+                audio.addEventListener('error', function() {
+                    durationEl.textContent = '—';
+                });
+            } catch (e) {
+                durationEl.textContent = '—';
+            }
+        }
+
+        function getPlaylists() {
+            try {
+                return JSON.parse(localStorage.getItem('NeRuaD_playlists') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function renderPlaylistsInline() {
+            var list = document.getElementById('playlistListInline');
+            list.innerHTML = '';
+            var playlists = getPlaylists();
+            if (!playlists.length) {
+                list.innerHTML = '<span class="muted">No playlists yet</span>';
+                return;
+            }
+            playlists.forEach(function(pl) {
+                var chip = document.createElement('a');
+                chip.href = `playlists.html?id=${pl.id}`;
+                chip.className = 'playlist-chip';
+                chip.textContent = pl.name;
+                list.appendChild(chip);
+            });
+        }
+
+        function attachAudioHandlers(scope) {
+            if (!scope) return;
+            scope.addEventListener('click', function(event) {
+                var img = event.target.closest('img[data-audio]');
+                if (!img) return;
+
+                var src = img.getAttribute('data-audio');
+                var card = img.closest('.track-row');
+                if (!src) return;
+
+                if (window.currentAudio && window.currentAudio.src.includes(src)) {
+                    window.currentAudio.pause();
+                    window.currentAudio.currentTime = 0;
+                    if (card) card.classList.remove('playing');
+                    return;
+                }
+
+                if (window.currentAudio) {
+                    window.currentAudio.pause();
+                    window.currentAudio.currentTime = 0;
+                }
+
+                window.currentAudio = new Audio(src);
+                const storedVolume = localStorage.getItem('NeRuaD_volume');
+                window.currentAudio.volume = storedVolume ? parseFloat(storedVolume) / 100 : 0.7;
+                window.currentAudio.play().catch(function(){});
+
+                document.querySelectorAll('.track-row.playing').forEach(function(c){ c.classList.remove('playing'); });
+                if (card) card.classList.add('playing');
+
+                if (window.updatePlayerTrackInfo) {
+                    window.updatePlayerTrackInfo(card);
+                }
+            });
+        }
+
         if (!window.FavoritesManager || !window.FavoritesManager.isUserLoggedIn()) {
-            // User not logged in - show message
-            var grid = document.getElementById('favouritesGrid');
+            var listEl = document.getElementById('favouritesList');
             var emptyWrap = document.createElement('div');
-            emptyWrap.className = 'text-center text-secondary py-5';
+            emptyWrap.className = 'empty-state text-center';
             emptyWrap.innerHTML = `
                 <div class="mb-3">
                     <i style="font-size: 3rem; color: #666;">🔒</i>
@@ -108,18 +245,19 @@
                 <a href="login.html" class="btn btn-warning">Login</a>
                 <a href="register.html" class="btn btn-outline-secondary ms-2">Sign Up</a>
             `;
-            grid.parentNode.appendChild(emptyWrap);
+            listEl.parentNode.appendChild(emptyWrap);
             return;
         }
 
-        // Get user's favorites
+        renderPlaylistsInline();
+
         var list = window.FavoritesManager.readUserFavorites();
-        var grid = document.getElementById('favouritesGrid');
-        grid.innerHTML = '';
-        
+        var listEl = document.getElementById('favouritesList');
+        listEl.innerHTML = '';
+
         if (!list.length) {
             var emptyWrap = document.createElement('div');
-            emptyWrap.className = 'text-center text-secondary py-5';
+            emptyWrap.className = 'empty-state text-center';
             emptyWrap.innerHTML = `
                 <div class="mb-3">
                     <i class="fas fa-heart" style="font-size: 3rem; color: #666;"></i>
@@ -128,81 +266,108 @@
                 <p>Start adding your favorite tracks from the home page!</p>
                 <a href="../../index.html" class="btn btn-warning">Browse Music</a>
             `;
-            grid.parentNode.appendChild(emptyWrap);
+            listEl.parentNode.appendChild(emptyWrap);
             return;
         }
-        
-        // Show notification for loaded favorites
-        if (window.showNotification) {
-            showNotification('Favorites Loaded', `Found ${list.length} favorite track(s)`, 'info', 2000);
-        }
-        
+
         list.forEach(function (item, index) {
-            var col = document.createElement('div');
-            col.className = 'col';
-            var card = document.createElement('div');
-            card.className = 'card h-100 bg-dark border-secondary text-light';
-            card.setAttribute('data-title', item.title);
-            
+            var row = document.createElement('div');
+            row.className = 'track-row';
+            row.setAttribute('data-title', item.title);
+
+            var indexEl = document.createElement('div');
+            indexEl.className = 'track-index';
+            indexEl.textContent = String(index + 1).padStart(2, '0');
+
+            var playIcon = document.createElement('div');
+            playIcon.className = 'track-play';
+            playIcon.textContent = '▶';
+
             var img = document.createElement('img');
-            img.className = 'card-img-top';
-            img.src = item.img.replace('frontend/src/img/', '../src/img/');
+            img.className = 'track-cover';
+            var safeImg = item.img || '';
+            img.src = safeImg ? safeImg.replace('frontend/src/img/', '../src/img/') : '../src/img/track1.jpeg';
             img.alt = item.title;
-            
-            var body = document.createElement('div');
-            body.className = 'card-body d-flex flex-column';
-            
-            var p = document.createElement('p');
-            p.className = 'card-text mb-2';
-            p.textContent = item.title;
-            
-            // Add copy button for track title
-            var copyBtn = document.createElement('button');
-            copyBtn.className = 'copy-btn btn btn-sm btn-outline-secondary';
-            copyBtn.setAttribute('data-copy-text', item.title);
-            copyBtn.innerHTML = '<span class="copy-icon">📋</span> <span class="copy-text">Copy</span>';
-            
-            // Add remove button
+            var audio = resolveAudio(item);
+            if (audio) {
+                img.setAttribute('data-audio', audio);
+            }
+            playIcon.addEventListener('click', function() {
+                if (audio) {
+                    img.click();
+                }
+            });
+
+            var meta = document.createElement('div');
+            meta.className = 'track-meta';
+            var title = document.createElement('h4');
+            title.textContent = item.title;
+            var sub = document.createElement('p');
+            sub.textContent = 'Favourite track';
+            meta.appendChild(title);
+            meta.appendChild(sub);
+
+            var actions = document.createElement('div');
+            actions.className = 'track-actions';
+
+            var heartBtn = document.createElement('button');
+            heartBtn.className = 'track-heart active';
+            heartBtn.textContent = '♥';
+
+            var playBtn = document.createElement('button');
+            playBtn.className = 'btn btn-play btn-sm';
+            playBtn.textContent = 'Play';
+            playBtn.addEventListener('click', function() {
+                if (audio) {
+                    img.click();
+                }
+            });
+
             var removeBtn = document.createElement('button');
-            removeBtn.className = 'btn btn-sm btn-danger mt-auto';
-            removeBtn.innerHTML = ' &#128465;&#65039';
+            removeBtn.className = 'btn btn-outline-danger btn-sm';
+            removeBtn.textContent = 'Remove';
             removeBtn.onclick = function() {
                 removeFromFavorites(item.id);
             };
-            
-            body.appendChild(p);
-            body.appendChild(copyBtn);
-            body.appendChild(removeBtn);
-            card.appendChild(img);
-            card.appendChild(body);
-            col.appendChild(card);
-            grid.appendChild(col);
+
+            actions.appendChild(heartBtn);
+            actions.appendChild(playBtn);
+            actions.appendChild(removeBtn);
+
+            var duration = document.createElement('div');
+            duration.className = 'track-duration';
+            duration.textContent = '—';
+
+            row.appendChild(indexEl);
+            row.appendChild(playIcon);
+            row.appendChild(img);
+            row.appendChild(meta);
+            row.appendChild(duration);
+            row.appendChild(actions);
+            listEl.appendChild(row);
+
+            applyDuration(audio, duration, item.duration);
         });
-        
-        // Initialize copy buttons after DOM is updated
-        setTimeout(function() {
-            if (window.initializeCopyToClipboard) {
-                initializeCopyToClipboard();
-            }
-        }, 100);
+
+        attachAudioHandlers(listEl);
+        if (window.refreshTrackList) {
+            window.refreshTrackList();
+        }
     });
-    
+
     function removeFromFavorites(itemId) {
         if (!window.FavoritesManager) return;
-        
-        // Remove from user's favorites
+
         const success = window.FavoritesManager.removeFromUserFavorites(itemId);
-        
+
         if (success) {
-            // Show notification
             if (window.showNotification) {
                 showNotification('Removed', 'Track removed from favorites', 'success', 2000);
             }
-            
-            // Reload the page to update the display
+
             setTimeout(function() {
                 location.reload();
-            }, 1000);
+            }, 500);
         }
     }
     </script>
