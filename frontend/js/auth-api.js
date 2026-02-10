@@ -6,24 +6,66 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const usernameInput = document.getElementById('username');
 
+    // Validation functions
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password) => {
+        return password.length >= 6;
+    };
+
+    const validateUsername = (username) => {
+        return username.length >= 3 && username.length <= 20 && /^[a-zA-Z0-9_]+$/.test(username);
+    };
+
+    const showError = (message) => {
+        if (window.showNotification) {
+            showNotification('Error', message, 'error', 2000);
+        } else {
+            alert(message);
+        }
+    };
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
+
         const email = emailInput ? emailInput.value.trim() : '';
         const password = passwordInput ? passwordInput.value.trim() : '';
         const username = usernameInput ? usernameInput.value.trim() : '';
 
+        // Basic required field validation
         if (!email || !password || (usernameInput && !username)) {
-            if (window.showNotification) {
-                showNotification('Error', 'Please заполните все поля', 'error', 2000);
-            } else {
-                alert('Please заполните все поля');
-            }
+            showError('Please fill in all required fields');
+            return;
+        }
+
+        // Email validation
+        if (!validateEmail(email)) {
+            showError('Please enter a valid email address');
+            emailInput?.focus();
+            return;
+        }
+
+        // Password validation
+        if (!validatePassword(password)) {
+            showError('Password must be at least 6 characters long');
+            passwordInput?.focus();
+            return;
+        }
+
+        // Username validation (only for registration)
+        if (usernameInput && !validateUsername(username)) {
+            showError('Username must be 3-20 characters long and contain only letters, numbers, and underscores');
+            usernameInput?.focus();
             return;
         }
 
         try {
             const isRegister = Boolean(usernameInput);
             const payload = isRegister ? { username, email, password } : { email, password };
+            console.log(payload);
             const data = await ApiClient.request(isRegister ? '/auth/register' : '/auth/login', {
                 method: 'POST',
                 body: JSON.stringify(payload)
