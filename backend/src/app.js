@@ -49,7 +49,6 @@ app.use("/api/tracks", videoClipsRoutes);
 app.use("/api/subscription", subscriptionsRoutes);
 app.use("/api/share-capsules", shareCapsulesRoutes);
 
-// Serve frontend index.html for all non-API routes (catch-all)
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../..", "index.html"));
 });
