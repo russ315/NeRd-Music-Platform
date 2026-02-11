@@ -49,10 +49,6 @@ app.use("/api/tracks", videoClipsRoutes);
 app.use("/api/subscription", subscriptionsRoutes);
 app.use("/api/share-capsules", shareCapsulesRoutes);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../..", "index.html"));
-});
-
 app.use(errorHandler);
 
 module.exports = app;
