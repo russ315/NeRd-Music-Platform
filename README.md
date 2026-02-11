@@ -268,7 +268,7 @@ NeRuaD-Music-Platform/
 - Social features and collaboration playlists
 - More music providers (Spotify, SoundCloud)
 - Improved search and recommendation quality
-
+  
 ## Acknowledgments
 - Bootstrap for UI components
 - Deezer API for music data
