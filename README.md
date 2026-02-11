@@ -1,53 +1,58 @@
-# NeRuaD Music Platform
+﻿# NeRuaD Music Platform
 
-A modern web-based music streaming platform with user authentication, favorites management, and external API integration.
+A modern web-based music streaming platform with user authentication, favorites management, playlists, and external API integration.
 
 ## Team Members
 - Ruslan Bolatbekuly
 - Nurkhan Orazbay
+- Zhexenov Dauren
 
-## Features
+## Project Proposal
+
+**Project title:** NeRuaD
+
+**Topic:** Music platform in Spotify-like style with support for video clips and personalized playlists. Users can listen to music, watch clips, and get recommendations.
+
+**Why this project:** The team wanted to build a practical product around everyday music usage and combine frontend + backend skills in one system.
+
+## Main Features
+- Personalized music suggestions (simple recommendation logic)
+- Playlist creation and editing
+- Favorite tracks
+- User profile and settings
+- Monthly subscription concept (no ads, infinite stream, weekly picks)
+- Video clips page for tracks
+- Unique feature: **Share Capsule** (short set of 5-10 tracks shared by code/link with expiration)
+
+## Current Implemented Features
 
 ### User Authentication
-- User registration and login system
-- Session management with localStorage
-- Protected routes for authenticated users
-- User-specific favorites
+- User registration and login flow
+- Session persistence in localStorage and token-based API mode
+- Protected pages/routes for authenticated users
 
 ### Music Player
-- Bottom music player with full controls
-- Play, pause, skip tracks
+- Bottom player with play/pause/next/prev
 - Volume control with persistence
-- Progress bar with seek functionality
+- Progress bar with seeking
 - Auto-play next track
 
-### Favorites System
-- Add tracks to favorites
-- User-specific favorites (each user has their own list)
-- View and manage favorite tracks
-- Remove tracks from favorites
+### Favorites and Playlists
+- Add/remove favorites
+- User-scoped favorites list
+- Playlist management and track assignment
 
 ### External API Integration
-- Deezer API integration for real music data
-- Fetch trending tracks
-- 30-second audio previews
-- Search functionality
-- Album artwork display
+- Deezer API integration for track metadata
+- Trending tracks fetch
+- 30-second preview playback
+- Search support
 
-### User Profile
-- Personalized user profiles
-- Edit profile information
-- Change avatar colors
-- View listening statistics
-- Manage account settings
-
-### Other Features
-- Star rating system for tracks
-- Genre filtering
-- Internationalization (English/Russian)
-- Responsive design
-- Dark theme UI
-- Search functionality
+### Profile and UX
+- Profile editing
+- Avatar and settings controls
+- Ratings and statistics widgets
+- i18n (English/Russian), responsive UI, theming
 
 ## Technologies Used
 
@@ -57,142 +62,213 @@ A modern web-based music streaming platform with user authentication, favorites 
 - JavaScript (ES6+)
 - Bootstrap 5
 
+### Backend
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT + bcrypt
+
 ### APIs
 - Deezer API (music data)
-- CORS proxy for API requests
+- CORS proxy for client-side API requests
 
-### Storage
-- localStorage for data persistence
-- User sessions
-- Favorites storage
-- Profile data
+## Database Design (Schemas)
+
+### User
+- `_id` (ObjectId)
+- `username` (string)
+- `email` (string, unique)
+- `passwordHash` (string)
+- `role` (string: user / premium / admin)
+- `createdAt`, `updatedAt`
+
+### Profile
+- `_id`
+- `userId` (ref User)
+- `avatarColor` (string)
+- `bio` (string, optional)
+- `settings` (object: notifications, autoplay, privacy)
+- `stats` (object: favoritesCount, playlistsCount, listenMinutes, avgRating)
+
+### Track
+- `_id`
+- `externalId` (string, id from external API)
+- `title` (string)
+- `artist` (string)
+- `album` (string)
+- `previewUrl` (string)
+- `duration` (number)
+- `genre` (string)
+- `source` (string: deezer / local)
+
+### Playlist
+- `_id`
+- `userId` (ref User)
+- `title` (string)
+- `description` (string)
+- `isPublic` (boolean)
+- `trackIds` (array of Track refs)
+- `createdAt`, `updatedAt`
+
+### Favorite
+- `_id`
+- `userId` (ref User)
+- `trackId` (ref Track)
+- `createdAt`
+
+### Subscription
+- `_id`
+- `userId` (ref User)
+- `status` (string: active / inactive)
+- `plan` (string: monthly)
+- `startedAt`, `expiresAt`
+
+### VideoClip
+- `_id`
+- `trackId` (ref Track)
+- `title` (string)
+- `videoUrl` (string)
+- `source` (string: youtube / local)
+
+### ShareCapsule
+- `_id`
+- `userId` (ref User)
+- `title` (string)
+- `trackIds` (array of Track refs)
+- `shareCode` (string, unique)
+- `expiresAt` (date)
+- `createdAt`
+
+## API Endpoint List
+
+### Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+
+### User / Profile
+- `GET /api/users/me`
+- `PUT /api/users/me`
+- `GET /api/users/me/profile`
+- `PUT /api/users/me/profile`
+
+### Playlists
+- `POST /api/playlists`
+- `GET /api/playlists`
+- `GET /api/playlists/:id`
+- `PUT /api/playlists/:id`
+- `DELETE /api/playlists/:id`
+- `POST /api/playlists/:id/tracks`
+- `DELETE /api/playlists/:id/tracks/:trackId`
+
+### Favorites
+- `GET /api/favorites`
+- `POST /api/favorites`
+- `DELETE /api/favorites/:trackId`
+
+### Tracks
+- `POST /api/tracks`
+- `GET /api/tracks/:id`
+
+### Video Clips
+- `GET /api/tracks/:id/clips`
+- `POST /api/tracks/:id/clips`
+
+### Subscriptions
+- `GET /api/subscription`
+- `PUT /api/subscription`
+
+### Share Capsule
+- `POST /api/share-capsules`
+- `GET /api/share-capsules/:shareCode`
 
 ## Project Structure
 
-```
+```text
 NeRuaD-Music-Platform/
-├── frontend/
-│   ├── css/
-│   │   ├── main.css
-│   │   ├── login.css
-│   │   ├── favourite.css
-│   │   └── profile.css
-│   ├── html/
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   ├── favourite.html
-│   │   └── profile.html
-│   ├── js/
-│   │   ├── index.js
-│   │   ├── main.js
-│   │   ├── player.js
-│   │   ├── search.js
-│   │   ├── validation.js
-│   │   ├── auth.js
-│   │   ├── profile.js
-│   │   ├── api-service.js
-│   │   ├── favorites-manager.js
-│   │   └── shared-ux.js
-│   └── src/
-│       ├── img/
-│       └── music/
-├── index.html
-└── README.md
+|-- frontend/
+|   |-- css/
+|   |-- html/
+|   |-- js/
+|   `-- src/
+|       |-- img/
+|       `-- music/
+|-- backend/
+|   |-- src/
+|   |   |-- config/
+|   |   |-- controllers/
+|   |   |-- middlewares/
+|   |   |-- models/
+|   |   `-- routes/
+|   `-- package.json
+|-- index.html
+|-- API_INTEGRATION.md
+`-- README.md
 ```
 
 ## How to Run
 
-1. Clone the repository
-2. Open `index.html` in a web browser
-3. Or use a local server (recommended):
+1. Clone the repository.
+2. Install backend dependencies:
    ```bash
-   # Using Python
-   python -m http.server 8000
-   
-   # Using Node.js
-   npx http-server
+   cd backend
+   npm install
    ```
-4. Navigate to `http://localhost:8000`
+3. Configure backend env:
+   - create `backend/.env`
+   - set `PORT`, `MONGO_URI`, `JWT_SECRET`
+4. Start backend:
+   ```bash
+   npm run dev
+   ```
+5. Open frontend from backend static server:
+   - `http://localhost:4000`
 
 ## Usage
 
 ### Registration
-1. Click "Sign Up" button
-2. Enter username, email, and password
-3. Submit the form
-4. Automatically logged in after registration
+1. Click **Sign Up**.
+2. Enter username, email, and password.
+3. Submit the form.
 
 ### Login
-1. Click "Login" button
-2. Enter email and password
-3. Submit the form
+1. Click **Login**.
+2. Enter email and password.
+3. Submit the form.
 
-### Adding Favorites
-1. Login to your account
-2. Browse music tracks
-3. Click "Add to Favourites" button
-4. View your favorites in the Favourites page
+### Favorites
+1. Log in.
+2. Browse tracks.
+3. Click **Add to Favourites**.
+4. Open **Favourites** page to manage items.
 
-### Playing Music
-1. Click on any track image to start playing
-2. Use the player controls at the bottom:
-   - Play/Pause button
-   - Previous/Next track buttons
-   - Volume slider
-   - Progress bar for seeking
+### Profile
+1. Open profile page.
+2. Edit profile fields and settings.
+3. Check quick statistics.
 
-### Profile Management
-1. Click on your username in the navigation
-2. Edit profile information
-3. Change avatar color
-4. View your statistics
-
-## API Integration
-
-The platform uses the Deezer API to fetch real music data:
-- Trending tracks from Deezer charts
-- Track previews (30 seconds)
-- Album artwork
-- Artist information
-
-API requests are proxied through `corsproxy.io` to handle CORS restrictions.
-
-## Data Storage
-
-All user data is stored in browser's localStorage:
-- `NeRuaD_auth` - Authentication status
-- `NeRuaD_user` - User information
-- `NeRuaD_profile` - Profile data
-- `NeRuaD_favourites_[email]` - User-specific favorites
-- `NeRuaD_ratings` - Track ratings
-- `NeRuaD_volume` - Player volume setting
-- `NeRuaD_lang` - Language preference
+## Data Storage Notes
+- Local UI state uses browser localStorage (theme, some UI preferences, cached lists).
+- Backend persistence uses MongoDB for users, tracks, favorites, playlists, and related entities.
 
 ## Browser Compatibility
-
 - Chrome (recommended)
 - Firefox
 - Safari
 - Edge
 
 ## Known Issues
-
-- API tracks may not load if CORS proxy is down
-- Some Deezer preview URLs may not be available in all regions
-- localStorage is browser-specific (data doesn't sync across browsers)
+- Some pages still include localStorage fallback behavior.
+- Deezer previews can be unavailable by region or track.
+- CORS proxy availability can affect external API fetches.
 
 ## Future Enhancements
-
-- Backend server for proper authentication
-- Database for persistent storage
-- Playlist creation and management
-- Social features (share favorites)
-- More music sources (Spotify, SoundCloud)
-- Advanced search filters
-- User comments and reviews
+- Remove all legacy local-only auth flows
+- Full DB-only synchronization for profile/settings/statistics
+- Social features and collaboration playlists
+- More music providers (Spotify, SoundCloud)
+- Improved search and recommendation quality
 
 ## Acknowledgments
-
 - Bootstrap for UI components
 - Deezer API for music data
-- Font Awesome for icons (if used)
