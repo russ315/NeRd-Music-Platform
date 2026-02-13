@@ -13,9 +13,7 @@ const createToken = (user) => {
 const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "Missing fields" });
-    }
+    // Валидация теперь обрабатывается Joi middleware
 
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
@@ -44,9 +42,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "Missing fields" });
-    }
+    // Валидация теперь обрабатывается Joi middleware
 
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {

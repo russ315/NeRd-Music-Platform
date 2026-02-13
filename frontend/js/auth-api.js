@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const validatePassword = (password) => {
-        return password.length >= 6;
+        return password.length >= 6 && /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
     };
 
     const validateUsername = (username) => {
-        return username.length >= 3 && username.length <= 20 && /^[a-zA-Z0-9_]+$/.test(username);
+        return username.length >= 3 && username.length <= 20 && /^[a-zA-Z0-9]+$/.test(username);
     };
 
     const showError = (message) => {
@@ -50,14 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Password validation
         if (!validatePassword(password)) {
-            showError('Password must be at least 6 characters long');
+            showError('Password must be at least 6 characters long and contain at least one letter and one number');
             passwordInput?.focus();
             return;
         }
 
         // Username validation (only for registration)
         if (usernameInput && !validateUsername(username)) {
-            showError('Username must be 3-20 characters long and contain only letters, numbers, and underscores');
+            showError('Username must be 3-20 characters long and contain only letters and numbers');
             usernameInput?.focus();
             return;
         }
